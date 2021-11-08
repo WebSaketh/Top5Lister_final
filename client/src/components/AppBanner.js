@@ -85,8 +85,11 @@ export default function AppBanner() {
     }
   }
 
-  function getAccountMenu(loggedIn) {
-    return <AccountCircle />;
+  function getAccountMenu(loggedIn, user) {
+    if (!loggedIn) {
+      return <AccountCircle />;
+    }
+    return user.firstName.charAt(0) + user.lastName.charAt(0);
   }
 
   return (
@@ -114,7 +117,7 @@ export default function AppBanner() {
               onClick={handleProfileMenuOpen}
               color="inherit"
             >
-              {getAccountMenu(auth.loggedIn)}
+              {getAccountMenu(auth.loggedIn, auth.user)}
             </IconButton>
           </Box>
         </Toolbar>
