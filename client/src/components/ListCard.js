@@ -18,8 +18,8 @@ import DeleteModal from "./DeleteModal";
 function ListCard(props) {
   const { store } = useContext(GlobalStoreContext);
   const [editActive, setEditActive] = useState(false);
-  const [text, setText] = useState("");
   const { idNamePair } = props;
+  const [text, setText] = useState(idNamePair.name);
 
   function handleLoadList(event, id) {
     if (!event.target.disabled) {
@@ -30,14 +30,18 @@ function ListCard(props) {
 
   function handleToggleEdit(event) {
     event.stopPropagation();
+    toggleEdit(event);
+  }
+  function handleBlur() {
     toggleEdit();
   }
 
   function toggleEdit() {
     let newActive = !editActive;
     if (newActive) {
-      store.setIsListNameEditActive();
+      store.setIsListNameEditActive(true);
     }
+    store.setIsListNameEditActive(false);
     setEditActive(newActive);
   }
 
@@ -126,6 +130,7 @@ function ListCard(props) {
         className="list-card"
         onKeyPress={handleKeyPress}
         onChange={handleUpdateText}
+        onBlue={handleBlur}
         defaultValue={idNamePair.name}
         inputProps={{ style: { fontSize: 48 } }}
         InputLabelProps={{ style: { fontSize: 24 } }}
