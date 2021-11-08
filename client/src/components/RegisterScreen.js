@@ -12,26 +12,34 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { GlobalStoreContext } from "../store";
+import BasicModal from "./BasicModal";
 import React, { useRef, Component } from "react";
 
 export default function RegisterScreen() {
   const { auth } = useContext(AuthContext);
   const { store } = useContext(GlobalStoreContext);
-  const passRef = useRef("pass");
+  const [open, setOpen] = React.useState(false);
+  const [message, setMessage] = React.useState("");
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   const handleSubmit = (event) => {
-    console.log("pressed");
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    auth.registerUser(
-      {
-        firstName: formData.get("firstName"),
-        lastName: formData.get("lastName"),
-        email: formData.get("email"),
-        password: formData.get("password"),
-        passwordVerify: formData.get("passwordVerify"),
-      },
-      store
-    );
+    auth
+      .registerUser(
+        {
+          firstName: formData.get("firstName"),
+          lastName: formData.get("lastName"),
+          email: formData.get("email"),
+          password: formData.get("password"),
+          passwordVerify: formData.get("passwordVerify"),
+        },
+        store
+      )
+      .catch((err) => {
+        setMessage(err.response?.data?.errorMessage);
+        handleOpen();
+      });
   };
 
   return (
@@ -115,6 +123,11 @@ export default function RegisterScreen() {
           >
             Sign Up
           </Button>
+          <BasicModal
+            message={message}
+            presence={open}
+            handleClose={handleClose}
+          />
           <Grid container justifyContent="flex-end">
             <Grid item>
               <Link href="/login/" variant="body2">
