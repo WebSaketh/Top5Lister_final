@@ -6,6 +6,7 @@ import ListItem from "@mui/material/ListItem";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import DeleteModal from "./DeleteModal";
 
 /*
     This is a card in our list of top 5 lists. It lets select
@@ -40,9 +41,25 @@ function ListCard(props) {
     setEditActive(newActive);
   }
 
-  async function handleDeleteList(event, id) {
-    event.stopPropagation();
-    store.markListForDeletion(id);
+  async function handleDeleteList(ev, id) {
+    ev.preventDefault();
+    ev.stopPropagation();
+    await store.markListForDeletion(id);
+  }
+
+  async function confirmDelete(ev) {
+    ev.preventDefault();
+    ev.stopPropagation();
+    await store.deleteMarkedList();
+    await store.loadIdNamePairs();
+    await store.unmarkListForDeletion();
+  }
+
+  async function cancelDelete(ev) {
+    ev.preventDefault();
+    ev.stopPropagation();
+    await store.unmarkListForDeletion();
+    console.log(store.listMarkedForDeletion);
   }
 
   function handleKeyPress(event) {
@@ -70,6 +87,13 @@ function ListCard(props) {
         width: "100%",
       }}
     >
+      <DeleteModal
+        message={idNamePair.name}
+        presence={store.listMarkedForDeletion}
+        handleClose={cancelDelete}
+        confirmCallback={confirmDelete}
+        subtype={"delete-modal"}
+      />
       <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}</Box>
       <Box sx={{ p: 1 }}>
         <IconButton onClick={handleToggleEdit} aria-label="edit">

@@ -74,6 +74,7 @@ updateTop5List = async (req, res) => {
 };
 
 deleteTop5List = async (req, res) => {
+  console.log(req.params.id);
   Top5List.findById({ _id: req.params.id }, (err, top5List) => {
     if (err) {
       return res.status(404).json({
@@ -82,6 +83,7 @@ deleteTop5List = async (req, res) => {
       });
     }
     Top5List.findOneAndDelete({ _id: req.params.id }, () => {
+      console.log("seemstobreakhere!");
       return res.status(200).json({ success: true, data: top5List });
     }).catch((err) => console.log(err));
   });
