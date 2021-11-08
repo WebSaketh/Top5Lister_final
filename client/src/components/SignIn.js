@@ -14,6 +14,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { GlobalStoreContext } from "../store";
+import BasicModal from "./BasicModal";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 function Copyright(props) {
@@ -39,22 +40,36 @@ const theme = createTheme();
 export default function SignIn() {
   const { auth } = useContext(AuthContext);
   const { store } = useContext(GlobalStoreContext);
+  const [open, setOpen] = React.useState(false);
+  const [message, setMessage] = React.useState("");
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   const handleSubmit = (event) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    auth.login(
-      {
-        email: formData.get("email"),
-        password: formData.get("password"),
-      },
-      store
-    );
+    auth
+      .login(
+        {
+          email: formData.get("email"),
+          password: formData.get("password"),
+        },
+        store
+      )
+      .catch((err) => {
+        setMessage(err.response?.data?.errorMessage);
+        handleOpen();
+      });
   };
 
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
+        <BasicModal
+          message={message}
+          presence={open}
+          handleClose={handleClose}
+        />
         <Box
           sx={{
             marginTop: 8,
