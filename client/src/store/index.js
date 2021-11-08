@@ -27,6 +27,7 @@ export const GlobalStoreActionType = {
   SET_CURRENT_LIST: "SET_CURRENT_LIST",
   SET_ITEM_EDIT_ACTIVE: "SET_ITEM_EDIT_ACTIVE",
   SET_LIST_NAME_EDIT_ACTIVE: "SET_LIST_NAME_EDIT_ACTIVE",
+  RESET_COUNTER: "RESET_COUNTER",
 };
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -153,6 +154,16 @@ function GlobalStoreContextProvider(props) {
           listMarkedForDeletion: null,
         });
       }
+      case GlobalStoreActionType.RESET_COUNTER: {
+        return setStore({
+          idNamePairs: [],
+          currentList: null,
+          newListCounter: 0,
+          listNameActive: false,
+          itemActive: false,
+          listMarkedForDeletion: null,
+        });
+      }
       default:
         return store;
     }
@@ -228,7 +239,7 @@ function GlobalStoreContextProvider(props) {
 
   // THIS FUNCTION LOADS ALL THE ID, NAME PAIRS SO WE CAN LIST ALL THE LISTS
   store.loadIdNamePairs = async function () {
-    const response = await api.getTop5ListPairs();
+    const response = await api.getTop5ListPairs({ email: auth.user.email });
     if (response.data.success) {
       let pairsArray = response.data.idNamePairs;
       storeReducer({
@@ -239,7 +250,12 @@ function GlobalStoreContextProvider(props) {
       console.log("API FAILED TO GET THE LIST PAIRS");
     }
   };
-
+  store.loggedOut = async function () {
+    storeReducer({
+      type: GlobalStoreActionType.RESET_COUNTER,
+      payload: null,
+    });
+  };
   // THE FOLLOWING 5 FUNCTIONS ARE FOR COORDINATING THE DELETION
   // OF A LIST, WHICH INCLUDES USING A VERIFICATION MODAL. THE
   // FUNCTIONS ARE markListForDeletion, deleteList, deleteMarkedList,

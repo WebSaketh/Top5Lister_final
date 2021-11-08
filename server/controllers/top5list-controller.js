@@ -1,4 +1,5 @@
 const Top5List = require("../models/top5list-model");
+const User = require("../models/user-model");
 
 createTop5List = (req, res) => {
   const body = req.body;
@@ -74,31 +75,43 @@ updateTop5List = async (req, res) => {
 };
 
 deleteTop5List = async (req, res) => {
+  const user = await User.findById(req.userId).exec();
   console.log(req.params.id);
-  Top5List.findById({ _id: req.params.id }, (err, top5List) => {
-    if (err) {
-      return res.status(404).json({
-        err,
-        message: "Top 5 List not found!",
-      });
+  Top5List.findById(
+    { _id: req.params.id, ownerEmail: user.email },
+    (err, top5List) => {
+      if (err) {
+        return res.status(404).json({
+          err,
+          message: "Top 5 List not found!",
+        });
+      }
+      Top5List.findOneAndDelete(
+        { _id: req.params.id, ownerEmail: user.email },
+        () => {
+          console.log("seemstobreakhere!");
+          return res.status(200).json({ success: true, data: top5List });
+        }
+      ).catch((err) => console.log(err));
     }
-    Top5List.findOneAndDelete({ _id: req.params.id }, () => {
-      console.log("seemstobreakhere!");
-      return res.status(200).json({ success: true, data: top5List });
-    }).catch((err) => console.log(err));
-  });
+  );
 };
 
 getTop5ListById = async (req, res) => {
-  await Top5List.findById({ _id: req.params.id }, (err, list) => {
-    if (err) {
-      return res.status(400).json({ success: false, error: err });
+  const user = await User.findById(req.userId).exec();
+  await Top5List.findById(
+    { _id: req.params.id, ownerEmail: user.email },
+    (err, list) => {
+      if (err) {
+        return res.status(400).json({ success: false, error: err });
+      }
+      return res.status(200).json({ success: true, top5List: list });
     }
-    return res.status(200).json({ success: true, top5List: list });
-  }).catch((err) => console.log(err));
+  ).catch((err) => console.log(err));
 };
 getTop5Lists = async (req, res) => {
-  await Top5List.find({}, (err, top5Lists) => {
+  const user = await User.findById(req.userId).exec();
+  await Top5List.find({ ownerEmail: user.email }, (err, top5Lists) => {
     if (err) {
       return res.status(400).json({ success: false, error: err });
     }
@@ -111,7 +124,8 @@ getTop5Lists = async (req, res) => {
   }).catch((err) => console.log(err));
 };
 getTop5ListPairs = async (req, res) => {
-  await Top5List.find({}, (err, top5Lists) => {
+  const user = await User.findById(req.userId).exec();
+  await Top5List.find({ ownerEmail: user.email }, (err, top5Lists) => {
     if (err) {
       return res.status(400).json({ success: false, error: err });
     }

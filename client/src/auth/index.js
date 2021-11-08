@@ -113,6 +113,7 @@ function AuthContextProvider(props) {
       });
       history.push("/");
     }
+    await store.loggedOut();
   };
   return (
     <AuthContext.Provider
