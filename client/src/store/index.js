@@ -207,7 +207,7 @@ function GlobalStoreContextProvider(props) {
     let newListName = "Untitled" + store.newListCounter;
     let payload = {
       name: newListName,
-      items: ["?", "?", "?", "?", "?"],
+      items: ["1", "2", "3", "4", "5"],
       ownerEmail: auth.user.email,
     };
     const response = await api.createTop5List(payload);
