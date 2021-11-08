@@ -58,6 +58,16 @@ login = async (req, res) => {
     .send();
 };
 
+logoutUser = async (req, res) => {
+  await res
+    .cookie("token", null, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+    })
+    .status(200)
+    .send();
+};
 registerUser = async (req, res) => {
   try {
     const { firstName, lastName, email, password, passwordVerify } = req.body;
@@ -125,4 +135,5 @@ module.exports = {
   getLoggedIn,
   registerUser,
   login,
+  logoutUser,
 };
