@@ -64,6 +64,7 @@ function Top5Item(props) {
       }
     }
     setEditActive(newActive);
+    setText(props.text);
   }
 
   function handleKeyPress(event) {

@@ -31,7 +31,7 @@ function EditToolbar() {
     <div id="edit-toolbar">
       <Button
         id="undo-button"
-        disabled={!store.canUndo()}
+        disabled={!store.canUndo() || store.isItemEditActive}
         onClick={handleUndo}
         variant="contained"
       >

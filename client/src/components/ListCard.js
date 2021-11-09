@@ -34,6 +34,7 @@ function ListCard(props) {
   }
   function handleBlur() {
     toggleEdit();
+    setText(idNamePair.name);
   }
 
   function toggleEdit() {
@@ -130,7 +131,7 @@ function ListCard(props) {
         className="list-card"
         onKeyPress={handleKeyPress}
         onChange={handleUpdateText}
-        onBlue={handleBlur}
+        onBlur={handleBlur}
         defaultValue={idNamePair.name}
         inputProps={{ style: { fontSize: 48 } }}
         InputLabelProps={{ style: { fontSize: 24 } }}
