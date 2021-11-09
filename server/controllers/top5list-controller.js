@@ -99,11 +99,17 @@ deleteTop5List = async (req, res) => {
 
 getTop5ListById = async (req, res) => {
   const user = await User.findById(req.userId).exec();
+  console.log(user.email);
+
   await Top5List.findById(
     { _id: req.params.id, ownerEmail: user.email },
     (err, list) => {
       if (err) {
         return res.status(400).json({ success: false, error: err });
+      }
+      console.log("110", list.ownerEmail);
+      if (list.ownerEmail !== user.email) {
+        return res.status(400).json({ success: false });
       }
       return res.status(200).json({ success: true, top5List: list });
     }

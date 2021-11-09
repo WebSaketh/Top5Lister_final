@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import Top5Item from "./Top5Item.js";
 import List from "@mui/material/List";
 import { Typography } from "@mui/material";
@@ -12,6 +12,12 @@ import { GlobalStoreContext } from "../store/index.js";
 function WorkspaceScreen() {
   const { store } = useContext(GlobalStoreContext);
 
+  useEffect(() => {
+    if (store.currentList == null) {
+      const id = window.location.pathname.substring("/top5list/".length);
+      store.setCurrentList(id);
+    }
+  });
   let editItems = "";
   if (store.currentList) {
     editItems = (
