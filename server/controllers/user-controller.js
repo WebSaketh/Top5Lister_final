@@ -28,14 +28,10 @@ login = async (req, res) => {
   }
   const user = await User.findOne({ email }).exec();
   if (!user) {
-    return res
-      .status(400)
-      .json({ errorMessage: "Invalid Username or Password" });
+    return res.status(400).json({ errorMessage: "1" });
   }
   if (!bcrypt.compareSync(password, user.passwordHash)) {
-    return res
-      .status(400)
-      .json({ errorMessage: "Invalid Username or Password" });
+    return res.status(400).json({ errorMessage: "1" });
   }
 
   const token = auth.signToken(user);

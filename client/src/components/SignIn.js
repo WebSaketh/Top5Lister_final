@@ -14,7 +14,6 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { GlobalStoreContext } from "../store";
-import BasicModal from "./BasicModal";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 function Copyright(props) {
@@ -40,10 +39,7 @@ const theme = createTheme();
 export default function SignIn() {
   const { auth } = useContext(AuthContext);
   const { store } = useContext(GlobalStoreContext);
-  const [open, setOpen] = React.useState(false);
-  const [message, setMessage] = React.useState("");
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const [error, setError] = React.useState(false);
   const handleSubmit = (event) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
@@ -56,20 +52,20 @@ export default function SignIn() {
         store
       )
       .catch((err) => {
-        setMessage(err.response?.data?.errorMessage);
-        handleOpen();
+        if (err.response?.data?.errorMessage == "1") {
+          setError(true);
+        }
       });
+  };
+
+  const setErrorFalse = () => {
+    setError(false);
   };
 
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
-        <BasicModal
-          message={message}
-          presence={open}
-          handleClose={handleClose}
-        />
         <Box
           sx={{
             marginTop: 8,
@@ -99,6 +95,8 @@ export default function SignIn() {
               name="email"
               autoComplete="email"
               autoFocus
+              error={error}
+              onBlur={setErrorFalse}
             />
             <TextField
               margin="normal"
@@ -109,6 +107,8 @@ export default function SignIn() {
               type="password"
               id="password"
               autoComplete="current-password"
+              error={error}
+              onBlur={setErrorFalse}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
