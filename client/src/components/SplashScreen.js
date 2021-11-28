@@ -1,5 +1,6 @@
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import Copyright from "./Copyright";
 import { Link } from "react-router-dom";
 export default function SplashScreen() {
   return (
@@ -74,6 +75,7 @@ export default function SplashScreen() {
         Create and share your Top 5 of anything! Rate and share your own lists,
         or rate and comment on other users lists. Join the community today!
       </h6>
+      <Copyright sx={{ mt: 10 }} />
     </div>
   );
 }

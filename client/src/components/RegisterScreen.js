@@ -12,19 +12,92 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { GlobalStoreContext } from "../store";
-import BasicModal from "./BasicModal";
 import React, { useRef, Component } from "react";
 
 export default function RegisterScreen() {
   const { auth } = useContext(AuthContext);
   const { store } = useContext(GlobalStoreContext);
-  const [open, setOpen] = React.useState(false);
-  const [message, setMessage] = React.useState("");
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const [errFirst, setErrFirst] = React.useState(false);
+  const [errLast, setErrLast] = React.useState(false);
+  const [errEmail, setErrEmail] = React.useState(false);
+  const [errUser, setErrUser] = React.useState(false);
+  const [errPass, setErrPass] = React.useState(false);
+  const [errVerify, setErrVerify] = React.useState(false);
+
+  const [errFirstMessage, setErrFirstMessage] = React.useState(null);
+  const [errLastMessage, setErrLastMessage] = React.useState(null);
+  const [errEmailMessage, setErrEmailMessage] = React.useState(null);
+  const [errUserMessage, setErrUserMessage] = React.useState(null);
+  const [errPassMessage, setErrPassMessage] = React.useState(null);
+  const [errVerifyMessage, setErrVerifyMessage] = React.useState(null);
+
+  const clearErr = () => {
+    setErrFirst(false);
+    setErrLast(false);
+    setErrUser(false);
+    setErrEmail(false);
+    setErrPass(false);
+    setErrVerify(false);
+    setErrFirstMessage(false);
+    setErrLastMessage(false);
+    setErrUserMessage(false);
+    setErrEmailMessage(false);
+    setErrPassMessage(false);
+    setErrVerifyMessage(false);
+  };
   const handleSubmit = (event) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
+    let localCheck = false;
+    if (formData.get("firstName") === "") {
+      console.log("emptyfirstname");
+      setErrFirst(true);
+      setErrFirstMessage("Please enter a first name");
+      localCheck = true;
+    }
+    if (formData.get("lastName") === "") {
+      console.log("emptyLastName");
+      setErrLastMessage("Please enter a last name");
+      setErrLast(true);
+      localCheck = true;
+    }
+    if (
+      !/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
+        formData.get("email")
+      )
+    ) {
+      console.log("invalid Email");
+      setErrEmailMessage("Email is invalid");
+      setErrEmail(true);
+      localCheck = true;
+    }
+
+    if (formData.get("email") === "") {
+      console.log("emptyEmail");
+      setErrEmailMessage("Email is required");
+      setErrEmail(true);
+      localCheck = true;
+    }
+
+    if (formData.get("password").length < 8) {
+      console.log("passInsufficientLength");
+      setErrPassMessage("Password must be 8 characters or longer");
+      setErrVerifyMessage("Password must be 8 characters or longer");
+      localCheck = true;
+      setErrPass(true);
+      setErrVerify(true);
+    }
+
+    if (formData.get("password") !== formData.get("passwordVerify")) {
+      console.log("passNotEqual");
+      setErrVerifyMessage("Passwords must match");
+      setErrPass(true);
+      setErrVerify(true);
+      localCheck = true;
+    }
+    if (localCheck === true) {
+      return;
+    }
     auth
       .registerUser(
         {
@@ -37,8 +110,7 @@ export default function RegisterScreen() {
         store
       )
       .catch((err) => {
-        setMessage(err.response?.data?.errorMessage);
-        handleOpen();
+        console.log(err.response?.data?.errorMessage);
       });
   };
 
@@ -70,6 +142,9 @@ export default function RegisterScreen() {
                 id="firstName"
                 label="First Name"
                 autoFocus
+                error={errFirst}
+                onChange={clearErr}
+                helperText={errFirstMessage}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -80,6 +155,9 @@ export default function RegisterScreen() {
                 label="Last Name"
                 name="lastName"
                 autoComplete="lname"
+                error={errLast}
+                onChange={clearErr}
+                helperText={errLastMessage}
               />
             </Grid>
             <Grid item xs={12}>
@@ -90,6 +168,9 @@ export default function RegisterScreen() {
                 label="Email Address"
                 name="email"
                 autoComplete="email"
+                error={errEmail}
+                onChange={clearErr}
+                helperText={errEmailMessage}
               />
             </Grid>
             <Grid item xs={12}>
@@ -101,6 +182,9 @@ export default function RegisterScreen() {
                 type="password"
                 id="password"
                 autoComplete="new-password"
+                error={errPass}
+                onChange={clearErr}
+                helperText={errPassMessage}
               />
             </Grid>
             <Grid item xs={12}>
@@ -108,10 +192,13 @@ export default function RegisterScreen() {
                 required
                 fullWidth
                 name="passwordVerify"
-                label="Password Verify"
+                label="Verify Password"
                 type="password"
                 id="passwordVerify"
                 autoComplete="new-password"
+                error={errVerify}
+                onChange={clearErr}
+                helperText={errVerifyMessage}
               />
             </Grid>
           </Grid>
@@ -123,11 +210,6 @@ export default function RegisterScreen() {
           >
             Sign Up
           </Button>
-          <BasicModal
-            message={message}
-            presence={open}
-            handleClose={handleClose}
-          />
           <Grid container justifyContent="flex-end">
             <Grid item>
               <Link href="/login/" variant="body2">
