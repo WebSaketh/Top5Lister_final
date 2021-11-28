@@ -111,6 +111,13 @@ export default function RegisterScreen() {
       )
       .catch((err) => {
         console.log(err.response?.data?.errorMessage);
+        if (err.response?.data?.errorMessage === "4") {
+          console.log("existingEmail");
+          setErrEmailMessage(
+            "An account associated with this email already exists"
+          );
+          setErrEmail(true);
+        }
       });
   };
 
