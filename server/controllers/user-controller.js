@@ -13,6 +13,7 @@ getLoggedIn = async (req, res) => {
           firstName: loggedInUser.firstName,
           lastName: loggedInUser.lastName,
           email: loggedInUser.email,
+          user: loggedInUser.username,
         },
       })
       .send();
@@ -49,6 +50,7 @@ login = async (req, res) => {
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
+        username: user.username,
       },
     })
     .send();
@@ -66,8 +68,16 @@ logoutUser = async (req, res) => {
 };
 registerUser = async (req, res) => {
   try {
-    const { firstName, lastName, email, password, passwordVerify } = req.body;
-    if (!firstName || !lastName || !email || !password || !passwordVerify) {
+    const { firstName, lastName, email, password, passwordVerify, username } =
+      req.body;
+    if (
+      !firstName ||
+      !lastName ||
+      !email ||
+      !password ||
+      !passwordVerify ||
+      !username
+    ) {
       return res.status(400).json({ errorMessage: "1" });
     }
     if (password.length < 8) {
@@ -88,6 +98,14 @@ registerUser = async (req, res) => {
       });
     }
 
+    const existingUsername = await User.findOne({ username: username });
+    if (existingUsername) {
+      return res.status(400).json({
+        success: false,
+        errorMessage: "5",
+      });
+    }
+
     const saltRounds = 10;
     const salt = await bcrypt.genSalt(saltRounds);
     const passwordHash = await bcrypt.hash(password, salt);
@@ -97,6 +115,7 @@ registerUser = async (req, res) => {
       lastName,
       email,
       passwordHash,
+      username,
     });
     const savedUser = await newUser.save();
 
@@ -116,6 +135,7 @@ registerUser = async (req, res) => {
           firstName: savedUser.firstName,
           lastName: savedUser.lastName,
           email: savedUser.email,
+          username: savedUser.username,
         },
       })
       .send();

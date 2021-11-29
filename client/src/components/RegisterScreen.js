@@ -61,6 +61,12 @@ export default function RegisterScreen() {
       setErrLast(true);
       localCheck = true;
     }
+    if (formData.get("username") === "") {
+      console.log("emptyUsername");
+      setErrUserMessage("Please choose a username");
+      setErrUser(true);
+      localCheck = true;
+    }
     if (
       !/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
         formData.get("email")
@@ -106,6 +112,7 @@ export default function RegisterScreen() {
           email: formData.get("email"),
           password: formData.get("password"),
           passwordVerify: formData.get("passwordVerify"),
+          username: formData.get("username"),
         },
         store
       )
@@ -117,6 +124,11 @@ export default function RegisterScreen() {
             "An account associated with this email already exists"
           );
           setErrEmail(true);
+        }
+        if (err.response?.data?.errorMessage === "5") {
+          console.log("existingUsername");
+          setErrUserMessage("This username is already in use");
+          setErrUser(true);
         }
       });
   };
@@ -165,6 +177,19 @@ export default function RegisterScreen() {
                 error={errLast}
                 onChange={clearErr}
                 helperText={errLastMessage}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                id="username"
+                label="Username"
+                name="username"
+                autoComplete="Username"
+                error={errUser}
+                onChange={clearErr}
+                helperText={errUserMessage}
               />
             </Grid>
             <Grid item xs={12}>
