@@ -5,18 +5,8 @@ import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined
 import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
 import FunctionsOutlinedIcon from "@mui/icons-material/FunctionsOutlined";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
-import ListItem from "@mui/material/ListItem";
-import IconButton from "@mui/material/IconButton";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import DeleteModal from "./DeleteModal";
-import Button from "@mui/material/Button";
-import HomeIcon from "@mui/icons-material/Home";
-import { border } from "@mui/system";
-import { Link } from "react-router-dom";
-import { createTheme, ThemeProvider, styled } from "@mui/material/styles";
+
 import { InputBase, Paper, Stack, Typography } from "@mui/material";
 import SortMenu from "./SortMenu";
 
@@ -170,7 +160,11 @@ function LoadMenu(props) {
             inputProps={{ "aria-label": "" }}
           />
         </Paper>
-        <Stack direction="row" style={{ marginLeft: "auto", marginRight: 0 }}>
+        <Stack
+          direction="row"
+          spacing={1}
+          style={{ marginLeft: "auto", marginRight: 0 }}
+        >
           <Box
             // style={{ width: "50%", margin: "0" }}
             display="flex"
