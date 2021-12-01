@@ -23,7 +23,9 @@ const HomeScreen = () => {
   let listCard = "";
   if (store) {
     listCard = (
-      <List sx={{ width: "96%", left: "2%", bgcolor: "background.paper" }}>
+      <List
+        sx={{ width: "96%", left: "2%", bgcolor: "transparent", p: 0, pu: 0 }}
+      >
         {store.idNamePairs.map((pair) => (
           <ListCard key={pair._id} idNamePair={pair} selected={false} />
         ))}

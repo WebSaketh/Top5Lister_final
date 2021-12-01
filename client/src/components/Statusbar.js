@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { GlobalStoreContext } from "../store";
-import { Typography } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import { Fab } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import AuthContext from "../auth";
@@ -28,16 +28,18 @@ function Statusbar() {
   }
   return (
     <div id="top5-statusbar">
-      <Fab
+      <Button
         color="primary"
         aria-label="add"
         id="add-list-button"
         onClick={handleCreateNewList}
         disabled={store.isListNameEditActive || store.currentList}
+        size="small"
+        style={{ color: "black" }}
       >
-        <AddIcon />
-      </Fab>
-      <Typography style={textDisable()} variant="h2">
+        <AddIcon style={{ color: "black", fontSize: "50px" }} />
+      </Button>
+      <Typography style={textDisable()} variant="h4">
         Your Lists
       </Typography>
     </div>

@@ -171,7 +171,9 @@ function LoadMenu(props) {
             alignItems="center"
             justifyContent="center"
           >
-            <Typography style={{ fontWeight: "bold" }}>SORT BY</Typography>
+            <Typography style={{ fontWeight: "bold", fontSize: "20px" }}>
+              SORT BY
+            </Typography>
           </Box>
           <Box
             // style={{ width: "50%", margin: "0" }}

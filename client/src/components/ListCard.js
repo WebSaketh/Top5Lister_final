@@ -7,7 +7,11 @@ import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DeleteModal from "./DeleteModal";
-
+import { Typography } from "@mui/material";
+import Stack from "@mui/material/Stack";
+import ThumbUpOffAltOutlinedIcon from "@mui/icons-material/ThumbUpOffAltOutlined";
+import ThumbDownAltOutlinedIcon from "@mui/icons-material/ThumbDownAltOutlined";
+import KeyboardArrowDownOutlinedIcon from "@mui/icons-material/KeyboardArrowDownOutlined";
 /*
     This is a card in our list of top 5 lists. It lets select
     a list for editing and it has controls for changing its 
@@ -82,7 +86,7 @@ function ListCard(props) {
     <ListItem
       id={idNamePair._id}
       key={idNamePair._id}
-      sx={{ marginTop: "15px", display: "flex", p: 1 }}
+      sx={{ marginBottom: "15px", display: "flex", p: 1 }}
       button
       onClick={(event) => {
         handleLoadList(event, idNamePair._id);
@@ -90,6 +94,11 @@ function ListCard(props) {
       style={{
         fontSize: "48pt",
         width: "100%",
+        borderRadius: "15px",
+        backgroundColor: "#FFFFF1",
+        borderStyle: "solid",
+        borderWidth: "1px",
+        borderColor: "black",
       }}
     >
       <DeleteModal
@@ -99,21 +108,139 @@ function ListCard(props) {
         confirmCallback={confirmDelete}
         subtype={"delete-modal"}
       />
-      <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}</Box>
-      <Box sx={{ p: 1 }}>
+      <Box sx={{ pl: 0.5, flexGrow: 1 }}>
+        <Box sx={{ p: 0.5, flexGrow: 1 }}>
+          <Typography variant="h5" style={{ fontWeight: "bold" }}>
+            {idNamePair.name}
+          </Typography>
+        </Box>
+        <Box sx={{ p: 0.5, flexGrow: 1 }}>
+          <Stack direction="row">
+            <Typography style={{ fontSize: "12px", fontWeight: "bold" }}>
+              By: &nbsp;
+            </Typography>
+            <Typography
+              style={{
+                fontSize: "12px",
+                fontWeight: "bold",
+                textDecoration: "underline",
+                color: "blue",
+              }}
+            >
+              Username
+            </Typography>
+          </Stack>
+        </Box>
+        <Box sx={{ p: 0.5, flexGrow: 1 }}>
+          <Typography
+            style={{
+              fontSize: "12px",
+              fontWeight: "bold",
+              textDecoration: "underline",
+              color: "red",
+            }}
+          >
+            EDIT
+          </Typography>
+        </Box>
+      </Box>
+      {/* <Box sx={{ p: 1 }}>
         <IconButton onClick={handleToggleEdit} aria-label="edit">
           <EditIcon style={{ fontSize: "48pt" }} />
         </IconButton>
-      </Box>
-      <Box sx={{ p: 1 }}>
-        <IconButton
-          onClick={(event) => {
-            handleDeleteList(event, idNamePair._id);
-          }}
-          aria-label="delete"
-        >
-          <DeleteIcon style={{ fontSize: "48pt" }} />
-        </IconButton>
+      </Box> */}
+      <Box sx={{ p: 0.0 }}>
+        <Box sx={{ p: 0.0 }}>
+          <Stack direction="row">
+            <IconButton aria-label="like">
+              <ThumbUpOffAltOutlinedIcon
+                style={{ color: "black", fontSize: "40pt" }}
+              />
+            </IconButton>
+
+            <Typography
+              style={{
+                fontSize: "20px",
+                fontWeight: "bold",
+                display: "flex",
+                alignItems: "center",
+                color: "black",
+              }}
+              sx={{ pr: 6 }}
+            >
+              404
+            </Typography>
+
+            <IconButton aria-label="dislike">
+              <ThumbDownAltOutlinedIcon
+                style={{ color: "black", fontSize: "35pt" }}
+              />
+            </IconButton>
+
+            <Typography
+              style={{
+                fontSize: "20px",
+                fontWeight: "bold",
+                display: "flex",
+                alignItems: "center",
+                color: "black",
+              }}
+              sx={{ pr: 6 }}
+            >
+              404
+            </Typography>
+
+            <IconButton
+              onClick={(event) => {
+                handleDeleteList(event, idNamePair._id);
+              }}
+              aria-label="delete"
+            >
+              <DeleteIcon style={{ color: "black", fontSize: "35pt" }} />
+            </IconButton>
+          </Stack>
+        </Box>
+
+        <Box sx={{ p: 0.0 }}>
+          <Stack direction="row">
+            <Box sx={{ p: 0.0, flexGrow: 1 }}>
+              <Stack
+                direction="row"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <Typography
+                  style={{
+                    fontSize: "15px",
+                    fontWeight: "bold",
+                    display: "flex",
+                    alignItems: "center",
+                    color: "black",
+                  }}
+                >
+                  Views: &nbsp;
+                </Typography>
+                <Typography
+                  sx={{ p: 0.0, flexGrow: 1 }}
+                  style={{
+                    fontSize: "15px",
+                    fontWeight: "bold",
+                    display: "flex",
+                    alignItems: "center",
+                    color: "#ab0000",
+                  }}
+                >
+                  420
+                </Typography>
+                <IconButton>
+                  <KeyboardArrowDownOutlinedIcon />
+                </IconButton>
+              </Stack>
+            </Box>
+          </Stack>
+        </Box>
       </Box>
     </ListItem>
   );
