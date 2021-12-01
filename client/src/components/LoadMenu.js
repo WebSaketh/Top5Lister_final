@@ -17,7 +17,8 @@ import HomeIcon from "@mui/icons-material/Home";
 import { border } from "@mui/system";
 import { Link } from "react-router-dom";
 import { createTheme, ThemeProvider, styled } from "@mui/material/styles";
-import { Stack } from "@mui/material";
+import { InputBase, Paper, Stack, Typography } from "@mui/material";
+import SortMenu from "./SortMenu";
 
 function LoadMenu(props) {
   function getStyleHome() {
@@ -27,7 +28,7 @@ function LoadMenu(props) {
         borderStyle: "solid",
         borderColor: "black",
         color: "black",
-        //backgroundColor: "#e6e6e6",
+        backgroundColor: "transparent",
       };
     }
     return {
@@ -35,7 +36,7 @@ function LoadMenu(props) {
       borderStyle: "solid",
       borderColor: "transparent",
       color: "black",
-      // backgroundColor: "#e6e6e6",
+      backgroundColor: "transparent",
     };
   }
   function getStyleAll() {
@@ -45,7 +46,7 @@ function LoadMenu(props) {
         borderStyle: "solid",
         borderColor: "black",
         color: "black",
-        //backgroundColor: "#e6e6e6",
+        backgroundColor: "transparent",
       };
     }
     return {
@@ -53,7 +54,7 @@ function LoadMenu(props) {
       borderStyle: "solid",
       borderColor: "transparent",
       color: "black",
-      //backgroundColor: "#e6e6e6",
+      backgroundColor: "transparent",
     };
   }
   function getStyleUser() {
@@ -63,7 +64,7 @@ function LoadMenu(props) {
         borderStyle: "solid",
         borderColor: "black",
         color: "black",
-        //backgroundColor: "#e6e6e6",
+        backgroundColor: "transparent",
       };
     }
     return {
@@ -71,7 +72,7 @@ function LoadMenu(props) {
       borderStyle: "solid",
       borderColor: "transparent",
       color: "black",
-      //backgroundColor: "#e6e6e6",
+      backgroundColor: "transparent",
     };
   }
   function getStyleAgg() {
@@ -81,7 +82,7 @@ function LoadMenu(props) {
         borderStyle: "solid",
         borderColor: "black",
         color: "black",
-        //backgroundColor: "#e6e6e6",
+        backgroundColor: "transparent",
       };
     }
     return {
@@ -89,7 +90,7 @@ function LoadMenu(props) {
       borderStyle: "solid",
       borderColor: "transparent",
       color: "black",
-      //backgroundColor: "#e6e6e6",
+      backgroundColor: "transparent",
     };
   }
 
@@ -118,36 +119,76 @@ function LoadMenu(props) {
   }
 
   const { store } = useContext(GlobalStoreContext);
+  function formSubmitHandler(e) {
+    e.preventDefault();
+  }
   return (
     <div id="loadMenu">
-      <ButtonUnstyled
-        onClick={setHome}
-        className="loadMenuButton"
-        style={getStyleHome()}
-      >
-        <HomeOutlinedIcon fontSize="large" />
-      </ButtonUnstyled>
-      <ButtonUnstyled
-        onClick={setAll}
-        className="loadMenuButton"
-        style={getStyleAll()}
-      >
-        <GroupsOutlinedIcon fontSize="large" />
-      </ButtonUnstyled>
-      <ButtonUnstyled
-        onClick={setUser}
-        className="loadMenuButton"
-        style={getStyleUser()}
-      >
-        <PersonOutlineOutlinedIcon fontSize="large" />
-      </ButtonUnstyled>
-      <ButtonUnstyled
-        onClick={setAgg}
-        className="loadMenuButton"
-        style={getStyleAgg()}
-      >
-        <FunctionsOutlinedIcon fontSize="large" />
-      </ButtonUnstyled>
+      <Stack direction="row" spacing={2}>
+        <ButtonUnstyled
+          onClick={setHome}
+          className="loadMenuButton"
+          style={getStyleHome()}
+        >
+          <HomeOutlinedIcon fontSize="large" />
+        </ButtonUnstyled>
+        <ButtonUnstyled
+          onClick={setAll}
+          className="loadMenuButton"
+          style={getStyleAll()}
+        >
+          <GroupsOutlinedIcon fontSize="large" />
+        </ButtonUnstyled>
+        <ButtonUnstyled
+          onClick={setUser}
+          className="loadMenuButton"
+          style={getStyleUser()}
+        >
+          <PersonOutlineOutlinedIcon fontSize="large" />
+        </ButtonUnstyled>
+        <ButtonUnstyled
+          onClick={setAgg}
+          className="loadMenuButton"
+          style={getStyleAgg()}
+        >
+          <FunctionsOutlinedIcon fontSize="large" />
+        </ButtonUnstyled>
+        <Paper
+          component="form"
+          sx={{
+            p: "2px 2px",
+            display: "flex",
+            alignItems: "center",
+            width: 350,
+          }}
+          elevation={0}
+          onSubmit={formSubmitHandler}
+        >
+          <InputBase
+            sx={{ ml: 1, flex: 1 }}
+            placeholder="Search"
+            inputProps={{ "aria-label": "" }}
+          />
+        </Paper>
+        <Stack direction="row" style={{ marginLeft: "auto", marginRight: 0 }}>
+          <Box
+            // style={{ width: "50%", margin: "0" }}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+          >
+            <Typography style={{ fontWeight: "bold" }}>SORT BY</Typography>
+          </Box>
+          <Box
+            // style={{ width: "50%", margin: "0" }}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+          >
+            <SortMenu></SortMenu>
+          </Box>
+        </Stack>
+      </Stack>
     </div>
   );
 }

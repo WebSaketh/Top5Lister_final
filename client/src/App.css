@@ -125,6 +125,8 @@ body {
   padding-top: 0.5%;
   left: 2%;
   opacity: "100%";
+  float: left;
+  width: 96%;
 }
 
 .loadMenuButton {
