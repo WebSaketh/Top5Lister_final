@@ -113,6 +113,7 @@ function LoadMenu(props) {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     store.updateQuery(formData.get("search"));
+    document.getElementByid("root").focus();
   }
   return (
     <div id="loadMenu">
