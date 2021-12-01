@@ -87,15 +87,14 @@ export default function AppBanner() {
   }
 
   function getAccountMenu(loggedIn, user) {
-    let k =
-      user.firstName.charAt(0).toUpperCase() +
-      user.lastName.charAt(0).toUpperCase();
     if (!loggedIn) {
       return <AccountCircle />;
     }
+    let k =
+      user.firstName.charAt(0).toUpperCase() +
+      user.lastName.charAt(0).toUpperCase();
     return <Avatar> {k}</Avatar>;
   }
-
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
