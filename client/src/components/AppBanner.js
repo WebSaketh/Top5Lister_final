@@ -11,6 +11,7 @@ import Typography from "@mui/material/Typography";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import AccountCircle from "@mui/icons-material/AccountCircle";
+import { Avatar } from "@mui/material";
 
 export default function AppBanner() {
   const { auth } = useContext(AuthContext);
@@ -86,10 +87,13 @@ export default function AppBanner() {
   }
 
   function getAccountMenu(loggedIn, user) {
+    let k =
+      user.firstName.charAt(0).toUpperCase() +
+      user.lastName.charAt(0).toUpperCase();
     if (!loggedIn) {
       return <AccountCircle />;
     }
-    return user.firstName.charAt(0) + user.lastName.charAt(0);
+    return <Avatar> {k}</Avatar>;
   }
 
   return (

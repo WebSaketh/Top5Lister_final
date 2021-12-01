@@ -28,6 +28,7 @@ export const GlobalStoreActionType = {
   SET_ITEM_EDIT_ACTIVE: "SET_ITEM_EDIT_ACTIVE",
   SET_LIST_NAME_EDIT_ACTIVE: "SET_LIST_NAME_EDIT_ACTIVE",
   RESET_COUNTER: "RESET_COUNTER",
+  SET_MENU: "SET_MENU",
 };
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -44,6 +45,7 @@ function GlobalStoreContextProvider(props) {
     listNameActive: false,
     itemActive: false,
     listMarkedForDeletion: null,
+    currentMenu: 1,
   });
   const history = useHistory();
 
@@ -64,6 +66,7 @@ function GlobalStoreContextProvider(props) {
           isListNameEditActive: false,
           isItemEditActive: false,
           listMarkedForDeletion: null,
+          currentMenu: store.currentMenu,
         });
       }
       // STOP EDITING THE CURRENT LIST
@@ -75,6 +78,7 @@ function GlobalStoreContextProvider(props) {
           isListNameEditActive: false,
           isItemEditActive: false,
           listMarkedForDeletion: null,
+          currentMenu: store.currentMenu,
         });
       }
       // CREATE A NEW LIST
@@ -86,6 +90,7 @@ function GlobalStoreContextProvider(props) {
           isListNameEditActive: false,
           isItemEditActive: false,
           listMarkedForDeletion: null,
+          currentMenu: store.currentMenu,
         });
       }
       // GET ALL THE LISTS SO WE CAN PRESENT THEM
@@ -97,6 +102,7 @@ function GlobalStoreContextProvider(props) {
           isListNameEditActive: false,
           isItemEditActive: false,
           listMarkedForDeletion: null,
+          currentMenu: store.currentMenu,
         });
       }
       // PREPARE TO DELETE A LIST
@@ -108,6 +114,7 @@ function GlobalStoreContextProvider(props) {
           isListNameEditActive: false,
           isItemEditActive: false,
           listMarkedForDeletion: payload,
+          currentMenu: store.currentMenu,
         });
       }
       // PREPARE TO DELETE A LIST
@@ -119,6 +126,7 @@ function GlobalStoreContextProvider(props) {
           isListNameEditActive: false,
           isItemEditActive: false,
           listMarkedForDeletion: null,
+          currentMenu: store.currentMenu,
         });
       }
       // UPDATE A LIST
@@ -130,6 +138,7 @@ function GlobalStoreContextProvider(props) {
           isListNameEditActive: false,
           isItemEditActive: false,
           listMarkedForDeletion: null,
+          currentMenu: store.currentMenu,
         });
       }
       // START EDITING A LIST ITEM
@@ -141,6 +150,7 @@ function GlobalStoreContextProvider(props) {
           isListNameEditActive: false,
           isItemEditActive: true,
           listMarkedForDeletion: null,
+          currentMenu: store.currentMenu,
         });
       }
       // START EDITING A LIST NAME
@@ -152,6 +162,7 @@ function GlobalStoreContextProvider(props) {
           isListNameEditActive: true,
           isItemEditActive: false,
           listMarkedForDeletion: null,
+          currentMenu: store.currentMenu,
         });
       }
       case GlobalStoreActionType.RESET_COUNTER: {
@@ -162,6 +173,18 @@ function GlobalStoreContextProvider(props) {
           listNameActive: false,
           itemActive: false,
           listMarkedForDeletion: null,
+          currentMenu: store.currentMenu,
+        });
+      }
+      case GlobalStoreActionType.SET_MENU: {
+        return setStore({
+          idNamePairs: store.idNamePairs,
+          currentList: store.currentList,
+          newListCounter: store.newListCounter,
+          listNameActive: store.listNameActive,
+          itemActive: store.itemActive,
+          listMarkedForDeletion: store.listMarkedForDeletion,
+          currentMenu: payload,
         });
       }
       default:
@@ -351,6 +374,12 @@ function GlobalStoreContextProvider(props) {
   store.updateItem = function (index, newItem) {
     store.currentList.items[index] = newItem;
     store.updateCurrentList();
+  };
+  store.updateMenu = function (val) {
+    storeReducer({
+      type: GlobalStoreActionType.SET_MENU,
+      payload: val,
+    });
   };
 
   store.updateCurrentList = async function () {
