@@ -132,14 +132,14 @@ function LoadMenu(props) {
         className="loadMenuButton"
         style={getStyleAll()}
       >
-        <PersonOutlineOutlinedIcon fontSize="large" />
+        <GroupsOutlinedIcon fontSize="large" />
       </ButtonUnstyled>
       <ButtonUnstyled
         onClick={setUser}
         className="loadMenuButton"
         style={getStyleUser()}
       >
-        <GroupsOutlinedIcon fontSize="large" />
+        <PersonOutlineOutlinedIcon fontSize="large" />
       </ButtonUnstyled>
       <ButtonUnstyled
         onClick={setAgg}
