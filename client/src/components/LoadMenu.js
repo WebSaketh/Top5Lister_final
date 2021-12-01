@@ -111,6 +111,8 @@ function LoadMenu(props) {
   const { store } = useContext(GlobalStoreContext);
   function formSubmitHandler(e) {
     e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    store.updateQuery(formData.get("search"));
   }
   return (
     <div id="loadMenu">
@@ -157,7 +159,11 @@ function LoadMenu(props) {
           <InputBase
             sx={{ ml: 1, flex: 1 }}
             placeholder="Search"
-            inputProps={{ "aria-label": "" }}
+            inputProps={{ "aria-label": "search" }}
+            name="search"
+            //label="Password"
+            type="text"
+            id="search"
           />
         </Paper>
         <Stack

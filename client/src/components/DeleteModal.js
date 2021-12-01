@@ -5,6 +5,8 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
+import { GlobalStoreContext } from "../store";
+import { useEffect, useContext } from "react";
 
 const style = {
   position: "absolute",
@@ -17,6 +19,48 @@ const style = {
 };
 
 export default function DeleteModal(props) {
+  const { store } = useContext(GlobalStoreContext);
+  if (store.listMarkedForDeletion?.name) {
+    return (
+      <div>
+        <Modal
+          open={props.presence != null}
+          onClose={props.handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            <Typography
+              align="center"
+              id="modal-modal-title"
+              variant="h6"
+              component="h2"
+            >
+              Delete Top 5 {store.listMarkedForDeletion?.name} List?
+            </Typography>
+            <Typography align="center">
+              <Button
+                align="center"
+                variant="contained"
+                color="success"
+                onClick={props.confirmCallback}
+              >
+                ✓
+              </Button>
+              <Button
+                align="center"
+                variant="contained"
+                color="error"
+                onClick={props.handleClose}
+              >
+                X
+              </Button>
+            </Typography>
+          </Box>
+        </Modal>
+      </div>
+    );
+  }
   return (
     <div>
       <Modal
@@ -32,7 +76,7 @@ export default function DeleteModal(props) {
             variant="h6"
             component="h2"
           >
-            Delete Top 5 {props.message} List?
+            Delete Top 5 List?
           </Typography>
           <Typography align="center">
             <Button
