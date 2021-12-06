@@ -442,10 +442,12 @@ function GlobalStoreContextProvider(props) {
     store.updateCurrentList();
   };
   store.updateMenu = function (val) {
+    console.log(val);
     storeReducer({
       type: GlobalStoreActionType.SET_MENU,
       payload: val,
     });
+    history.push("/");
   };
   store.updateQuery = function (val) {
     storeReducer({
@@ -520,9 +522,11 @@ function GlobalStoreContextProvider(props) {
         getListPairs(top5List);
       }
     }
-
+    console.log("2");
     const response = await api.getTop5ListById(id);
+    console.log("3");
     let list = response.data.top5List;
+    console.log(list);
     list.views++;
     console.log(list);
     updateList(list);

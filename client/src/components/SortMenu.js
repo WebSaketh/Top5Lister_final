@@ -12,29 +12,30 @@ export default function SortMenu() {
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
-  const handleClose = () => {
+  function handleClose() {
     setAnchorEl(null);
-  };
-  const setViews = () => {
+  }
+  function setViews() {
     store.updateSort(0);
     handleClose();
-  };
-  const setLikes = () => {
+  }
+  function setLikes() {
     store.updateSort(1);
     handleClose();
-  };
-  const setDislikes = () => {
+  }
+  function setDislikes() {
     store.updateSort(2);
     handleClose();
-  };
-  const setNew = () => {
+  }
+  function setNew() {
     store.updateSort(3);
     handleClose();
-  };
-  const setOld = () => {
+  }
+  function setOld() {
+    console.log("4");
     store.updateSort(4);
     handleClose();
-  };
+  }
 
   return (
     <div>

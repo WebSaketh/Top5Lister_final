@@ -42,6 +42,7 @@ function WorkspaceScreen() {
     store.closeCurrentList();
   };
   function publish() {
+    store.currentList.public = true;
     store.updateCurrentList();
     store.closeCurrentList();
   }

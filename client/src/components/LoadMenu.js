@@ -93,6 +93,7 @@ function LoadMenu(props) {
   }
 
   function setAll() {
+    console.log("run");
     //  console.log("before", store.currentMenu);
     store.updateMenu(2);
     // console.log("after", store.currentMenu);
@@ -115,7 +116,7 @@ function LoadMenu(props) {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     store.updateQuery(formData.get("search"));
-    document.getElementByid("root").focus();
+    document.getElementById("root").focus();
   }
 
   if (props.disabled) {
