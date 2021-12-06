@@ -65,7 +65,7 @@ function GlobalStoreContextProvider(props) {
     switch (type) {
       // LIST UPDATE OF ITS NAME
       case GlobalStoreActionType.CHANGE_LIST_NAME: {
-        return setStore({
+        return setStore((store) => ({
           idNamePairs: payload.idNamePairs,
           currentList: null,
           newListCounter: store.newListCounter,
@@ -76,11 +76,11 @@ function GlobalStoreContextProvider(props) {
           searchQuery: store.searchQuery,
           sortMode: store.sortMode,
           aggLists: store.aggLists,
-        });
+        }));
       }
       // STOP EDITING THE CURRENT LIST
       case GlobalStoreActionType.CLOSE_CURRENT_LIST: {
-        return setStore({
+        return setStore((store) => ({
           idNamePairs: store.idNamePairs,
           currentList: null,
           newListCounter: store.newListCounter,
@@ -91,11 +91,11 @@ function GlobalStoreContextProvider(props) {
           searchQuery: store.searchQuery,
           sortMode: store.sortMode,
           aggLists: store.aggLists,
-        });
+        }));
       }
       // CREATE A NEW LIST
       case GlobalStoreActionType.CREATE_NEW_LIST: {
-        return setStore({
+        return setStore((store) => ({
           idNamePairs: store.idNamePairs,
           currentList: payload,
           newListCounter: store.newListCounter + 1,
@@ -106,11 +106,11 @@ function GlobalStoreContextProvider(props) {
           searchQuery: store.searchQuery,
           sortMode: store.sortMode,
           aggLists: store.aggLists,
-        });
+        }));
       }
       // GET ALL THE LISTS SO WE CAN PRESENT THEM
       case GlobalStoreActionType.LOAD_ID_NAME_PAIRS: {
-        return setStore({
+        return setStore((store) => ({
           idNamePairs: payload,
           currentList: null,
           newListCounter: store.newListCounter,
@@ -121,11 +121,11 @@ function GlobalStoreContextProvider(props) {
           searchQuery: store.searchQuery,
           sortMode: store.sortMode,
           aggLists: store.aggLists,
-        });
+        }));
       }
       // PREPARE TO DELETE A LIST
       case GlobalStoreActionType.MARK_LIST_FOR_DELETION: {
-        return setStore({
+        return setStore((store) => ({
           idNamePairs: store.idNamePairs,
           currentList: null,
           newListCounter: store.newListCounter,
@@ -136,11 +136,11 @@ function GlobalStoreContextProvider(props) {
           searchQuery: store.searchQuery,
           sortMode: store.sortMode,
           aggLists: store.aggLists,
-        });
+        }));
       }
       // PREPARE TO DELETE A LIST
       case GlobalStoreActionType.UNMARK_LIST_FOR_DELETION: {
-        return setStore({
+        return setStore((store) => ({
           idNamePairs: store.idNamePairs,
           currentList: null,
           newListCounter: store.newListCounter,
@@ -151,11 +151,11 @@ function GlobalStoreContextProvider(props) {
           searchQuery: store.searchQuery,
           sortMode: store.sortMode,
           aggLists: store.aggLists,
-        });
+        }));
       }
       // UPDATE A LIST
       case GlobalStoreActionType.SET_CURRENT_LIST: {
-        return setStore({
+        return setStore((store) => ({
           idNamePairs: store.idNamePairs,
           currentList: payload,
           newListCounter: store.newListCounter,
@@ -166,11 +166,11 @@ function GlobalStoreContextProvider(props) {
           searchQuery: store.searchQuery,
           sortMode: store.sortMode,
           aggLists: store.aggLists,
-        });
+        }));
       }
       // START EDITING A LIST ITEM
       case GlobalStoreActionType.SET_ITEM_EDIT_ACTIVE: {
-        return setStore({
+        return setStore((store) => ({
           idNamePairs: store.idNamePairs,
           currentList: store.currentList,
           newListCounter: store.newListCounter,
@@ -181,11 +181,11 @@ function GlobalStoreContextProvider(props) {
           searchQuery: store.searchQuery,
           sortMode: store.sortMode,
           aggLists: store.aggLists,
-        });
+        }));
       }
       // START EDITING A LIST NAME
       case GlobalStoreActionType.SET_LIST_NAME_EDIT_ACTIVE: {
-        return setStore({
+        return setStore((store) => ({
           idNamePairs: store.idNamePairs,
           currentList: payload,
           newListCounter: store.newListCounter,
@@ -196,10 +196,10 @@ function GlobalStoreContextProvider(props) {
           searchQuery: store.searchQuery,
           sortMode: store.sortMode,
           aggLists: store.aggLists,
-        });
+        }));
       }
       case GlobalStoreActionType.RESET_COUNTER: {
-        return setStore({
+        return setStore((store) => ({
           idNamePairs: [],
           currentList: null,
           newListCounter: 0,
@@ -210,10 +210,10 @@ function GlobalStoreContextProvider(props) {
           searchQuery: store.searchQuery,
           sortMode: store.sortMode,
           aggLists: store.aggLists,
-        });
+        }));
       }
       case GlobalStoreActionType.SET_MENU: {
-        return setStore({
+        return setStore((store) => ({
           idNamePairs: store.idNamePairs,
           currentList: store.currentList,
           newListCounter: store.newListCounter,
@@ -224,10 +224,10 @@ function GlobalStoreContextProvider(props) {
           searchQuery: store.searchQuery,
           sortMode: store.sortMode,
           aggLists: store.aggLists,
-        });
+        }));
       }
       case GlobalStoreActionType.SET_QUERY: {
-        return setStore({
+        return setStore((store) => ({
           idNamePairs: store.idNamePairs,
           currentList: store.currentList,
           newListCounter: store.newListCounter,
@@ -238,10 +238,10 @@ function GlobalStoreContextProvider(props) {
           searchQuery: payload,
           sortMode: store.sortMode,
           aggLists: store.aggLists,
-        });
+        }));
       }
       case GlobalStoreActionType.SET_SORT: {
-        return setStore({
+        return setStore((store) => ({
           idNamePairs: store.idNamePairs,
           currentList: store.currentList,
           newListCounter: store.newListCounter,
@@ -252,13 +252,14 @@ function GlobalStoreContextProvider(props) {
           searchQuery: store.searchQuery,
           sortMode: payload,
           aggLists: store.aggLists,
-        });
+        }));
       }
       case GlobalStoreActionType.LOAD_AGG_LISTS: {
-        return setStore({
+        setStore((store) => ({
           ...store,
           aggLists: payload,
-        });
+        }));
+        return;
       }
       default:
         return store;
