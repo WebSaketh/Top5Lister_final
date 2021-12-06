@@ -7,11 +7,15 @@ import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DeleteModal from "./DeleteModal";
-import { Typography } from "@mui/material";
+import { List, ListItemButton, ListItemText, Typography } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import ThumbUpOffAltOutlinedIcon from "@mui/icons-material/ThumbUpOffAltOutlined";
 import ThumbDownAltOutlinedIcon from "@mui/icons-material/ThumbDownAltOutlined";
 import KeyboardArrowDownOutlinedIcon from "@mui/icons-material/KeyboardArrowDownOutlined";
+import KeyboardArrowUpOutlinedIcon from "@mui/icons-material/KeyboardArrowUpOutlined";
+import { InputBase, Paper } from "@mui/material";
+import { FixedSizeList } from "react-window";
+import AuthContext from "../auth";
 /*
     This is a card in our list of top 5 lists. It lets select
     a list for editing and it has controls for changing its 
@@ -24,12 +28,22 @@ function ListCard(props) {
   const [editActive, setEditActive] = useState(false);
   const { idNamePair } = props;
   const [text, setText] = useState(idNamePair.name);
-
+  const [open, setOpen] = useState(false);
+  const { auth } = useContext(AuthContext);
   function handleLoadList(event, id) {
     if (!event.target.disabled) {
       // CHANGE THE CURRENT LIST
       store.setCurrentList(id);
     }
+  }
+  function handleComment(e) {
+    e.preventDefault();
+    console.log(idNamePair);
+    const formData = new FormData(e.currentTarget);
+    console.log(auth.user);
+    let comment = auth.user.user + "@" + formData.get("comment");
+    idNamePair.comments.push(comment);
+    store.addComment(idNamePair._id, idNamePair);
   }
 
   function handleToggleEdit(event) {
@@ -39,6 +53,39 @@ function ListCard(props) {
   function handleBlur() {
     toggleEdit();
     setText(idNamePair.name);
+  }
+
+  function CommentList() {
+    const items = idNamePair.comments.map((comment, index) => (
+      <li key={index}>
+        <Box
+          style={{
+            backgroundColor: "gold",
+            borderRadius: "5px",
+            fontSize: "20pt",
+            fontWeight: "bold",
+            fontFamily: "Arial, Helvetica, sans-serif",
+            color: "darkBlue",
+            borderStyle: "solid",
+            borderColor: "black",
+            borderWidth: "2px",
+          }}
+          sx={{ p: 1.0, mb: 1, ml: 1, mr: 1 }}
+        >
+          {comment}
+        </Box>
+      </li>
+    ));
+    return (
+      <ul style={{ listStyleType: "none", paddingInlineStart: 0 }}>{items}</ul>
+    );
+  }
+
+  function makeOpen() {
+    setOpen(true);
+  }
+  function makeClose() {
+    setOpen(false);
   }
 
   function toggleEdit() {
@@ -88,9 +135,9 @@ function ListCard(props) {
       key={idNamePair._id}
       sx={{ marginBottom: "15px", display: "flex", p: 1 }}
       button
-      onClick={(event) => {
-        handleLoadList(event, idNamePair._id);
-      }}
+      // onClick={(event) => {
+      //   handleLoadList(event, idNamePair._id);
+      // }}
       style={{
         fontSize: "48pt",
         width: "100%",
@@ -127,7 +174,7 @@ function ListCard(props) {
                 color: "blue",
               }}
             >
-              Username
+              {idNamePair.username}
             </Typography>
           </Stack>
         </Box>
@@ -138,6 +185,9 @@ function ListCard(props) {
               fontWeight: "bold",
               textDecoration: "underline",
               color: "red",
+            }}
+            onClick={(event) => {
+              handleLoadList(event, idNamePair._id);
             }}
           >
             EDIT
@@ -168,7 +218,7 @@ function ListCard(props) {
               }}
               sx={{ pr: 6 }}
             >
-              404
+              {idNamePair.likes.length}
             </Typography>
 
             <IconButton aria-label="dislike">
@@ -187,7 +237,7 @@ function ListCard(props) {
               }}
               sx={{ pr: 6 }}
             >
-              404
+              {idNamePair.dislikes.length}
             </Typography>
 
             <IconButton
@@ -232,9 +282,9 @@ function ListCard(props) {
                     color: "#ab0000",
                   }}
                 >
-                  420
+                  {idNamePair.views}
                 </Typography>
-                <IconButton>
+                <IconButton onClick={makeOpen}>
                   <KeyboardArrowDownOutlinedIcon />
                 </IconButton>
               </Stack>
@@ -244,7 +294,255 @@ function ListCard(props) {
       </Box>
     </ListItem>
   );
+  //when open
+  if (open) {
+    if (!idNamePair.public) {
+      cardElement = (
+        <ListItem
+          id={idNamePair._id}
+          key={idNamePair._id}
+          sx={{ marginBottom: "15px", display: "flex", p: 1 }}
+          button
+          // onClick={(event) => {
+          //   handleLoadList(event, idNamePair._id);
+          // }}
+          style={{
+            fontSize: "48pt",
+            width: "100%",
+            borderRadius: "15px",
+            backgroundColor: "#FFFFF1",
+            borderStyle: "solid",
+            borderWidth: "1px",
+            borderColor: "black",
+          }}
+        >
+          <DeleteModal
+            message={idNamePair.name}
+            presence={store.listMarkedForDeletion}
+            handleClose={cancelDelete}
+            confirmCallback={confirmDelete}
+            subtype={"delete-modal"}
+          />
+          <Stack sx={{ p: 0.0, pt: 0.5, flexGrow: 1 }}>
+            <div>
+              <Stack direction="row">
+                <Box sx={{ p: 1, flexGrow: 1 }}>
+                  <Typography variant="h5" style={{ fontWeight: "bold" }}>
+                    {idNamePair.name}
+                  </Typography>
+                  <Stack sx={{ p: 1 }} direction="row">
+                    <Typography
+                      style={{ fontSize: "12px", fontWeight: "bold" }}
+                    >
+                      By: &nbsp;
+                    </Typography>
+                    <Typography
+                      style={{
+                        fontSize: "12px",
+                        fontWeight: "bold",
+                        textDecoration: "underline",
+                        color: "blue",
+                      }}
+                    >
+                      {idNamePair.username}
+                    </Typography>
+                  </Stack>
+                </Box>
+                <Box>
+                  <Stack direction="row">
+                    <IconButton aria-label="like">
+                      <ThumbUpOffAltOutlinedIcon
+                        style={{ color: "black", fontSize: "40pt" }}
+                      />
+                    </IconButton>
 
+                    <Typography
+                      style={{
+                        fontSize: "20px",
+                        fontWeight: "bold",
+                        display: "flex",
+                        alignItems: "center",
+                        color: "black",
+                      }}
+                      sx={{ pr: 6 }}
+                    >
+                      {idNamePair.likes.length}
+                    </Typography>
+
+                    <IconButton aria-label="dislike">
+                      <ThumbDownAltOutlinedIcon
+                        style={{ color: "black", fontSize: "35pt" }}
+                      />
+                    </IconButton>
+
+                    <Typography
+                      style={{
+                        fontSize: "20px",
+                        fontWeight: "bold",
+                        display: "flex",
+                        alignItems: "center",
+                        color: "black",
+                      }}
+                      sx={{ pr: 6 }}
+                    >
+                      {idNamePair.dislikes.length}
+                    </Typography>
+                    <IconButton
+                      onClick={(event) => {
+                        handleDeleteList(event, idNamePair._id);
+                      }}
+                      aria-label="delete"
+                    >
+                      <DeleteIcon
+                        style={{ color: "black", fontSize: "35pt" }}
+                      />
+                    </IconButton>
+                  </Stack>
+                </Box>
+              </Stack>
+            </div>
+            <div>
+              <Stack direction="row">
+                <Box
+                  sx={{ p: 1, pr: 1 }}
+                  style={{
+                    backgroundColor: "darkBlue",
+                    borderRadius: "5px",
+                    fontSize: "20pt",
+                    fontWeight: "bold",
+                    fontFamily: "Arial, Helvetica, sans-serif",
+                    color: "gold",
+                    height: "10",
+                    width: "50%",
+                  }}
+                >
+                  <Box sx={{ p: 0.5, pb: 1, flexGrow: 1, pr: 1 }}>
+                    1. {idNamePair.items[0]}
+                  </Box>
+                  <Box sx={{ p: 0.5, pb: 1, flexGrow: 1, pr: 1 }}>
+                    2. {idNamePair.items[1]}
+                  </Box>
+                  <Box sx={{ p: 0.5, pb: 1, flexGrow: 1, pr: 1 }}>
+                    3. {idNamePair.items[2]}
+                  </Box>
+                  <Box sx={{ p: 0.5, pb: 1, flexGrow: 1, pr: 1 }}>
+                    4. {idNamePair.items[3]}
+                  </Box>
+                  <Box sx={{ p: 0.5, pb: 1, flexGrow: 1, pr: 1 }}>
+                    5. {idNamePair.items[4]}
+                  </Box>
+                </Box>
+                <Stack
+                  style={{
+                    top: "70%",
+                    width: "50%",
+                    p: 3.0,
+                    alignItems: "center",
+                  }}
+                >
+                  <Paper
+                    style={{
+                      backgroundColor: "transparent",
+                      borderRadius: "5px",
+                      fontSize: "20pt",
+                      fontWeight: "bold",
+                      fontFamily: "Arial, Helvetica, sans-serif",
+                      color: "darkBlue",
+                      width: "100%",
+                      overflow: "scroll",
+                      overflowX: "hidden",
+                      minHeight: 195,
+                      maxHeight: 195,
+                    }}
+                    elevation={0}
+                  >
+                    <CommentList />
+                  </Paper>
+                  <Paper
+                    component="form"
+                    sx={{
+                      backgroundColor: "grey",
+                      display: "flex",
+                      alignItems: "center",
+                      width: "100%",
+                    }}
+                    elevation={0}
+                    onSubmit={handleComment}
+                  >
+                    <InputBase
+                      sx={{ ml: 1, flex: 1 }}
+                      placeholder="Comment"
+                      inputProps={{ "aria-label": "comment" }}
+                      name="comment"
+                      type="text"
+                      id={"comment" + idNamePair._id}
+                    />
+                  </Paper>
+                </Stack>
+              </Stack>
+            </div>
+            <div>
+              <Stack direction="row">
+                <Typography
+                  sx={{ p: 0.0, flexGrow: 1 }}
+                  style={{
+                    fontSize: "12px",
+                    fontWeight: "bold",
+                    textDecoration: "underline",
+                    color: "red",
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                  onClick={(event) => {
+                    handleLoadList(event, idNamePair._id);
+                  }}
+                >
+                  EDIT
+                </Typography>
+                <Typography
+                  sx={{ p: 0.0, flexGrow: 1 }}
+                  style={{
+                    fontSize: "15px",
+                    fontWeight: "bold",
+                    display: "flex",
+                    alignItems: "center",
+                    color: "#ab0000",
+                  }}
+                ></Typography>
+                <Typography
+                  style={{
+                    fontSize: "15px",
+                    fontWeight: "bold",
+                    display: "flex",
+                    alignItems: "center",
+                    color: "black",
+                  }}
+                >
+                  Views: &nbsp;
+                </Typography>
+
+                <Typography
+                  sx={{ p: 0.0, flexGrow: 1 }}
+                  style={{
+                    fontSize: "15px",
+                    fontWeight: "bold",
+                    display: "flex",
+                    alignItems: "center",
+                    color: "#ab0000",
+                  }}
+                >
+                  {idNamePair.views}
+                </Typography>
+                <IconButton onClick={makeClose}>
+                  <KeyboardArrowUpOutlinedIcon />
+                </IconButton>
+              </Stack>
+            </div>
+          </Stack>
+        </ListItem>
+      );
+    }
+  }
   if (editActive) {
     cardElement = (
       <TextField

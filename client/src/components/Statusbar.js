@@ -13,7 +13,7 @@ function Statusbar() {
   const { store } = useContext(GlobalStoreContext);
   const { auth } = useContext(AuthContext);
   function handleCreateNewList() {
-    store.createNewList();
+    store.createNewList(0);
   }
   function textDisable() {
     if (store.isListNameEditActive || store.currentList) {

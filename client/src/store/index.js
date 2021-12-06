@@ -289,12 +289,18 @@ function GlobalStoreContextProvider(props) {
   };
 
   // THIS FUNCTION CREATES A NEW LIST
-  store.createNewList = async function () {
+  store.createNewList = async function (mode) {
     let newListName = "Untitled" + store.newListCounter;
     let payload = {
       name: newListName,
       items: ["1", "2", "3", "4", "5"],
       ownerEmail: auth.user.email,
+      username: auth.user.user,
+      likes: [],
+      dislikes: [],
+      views: 0,
+      public: mode,
+      comments: [],
     };
     const response = await api.createTop5List(payload);
     if (response.data.success) {
@@ -457,6 +463,29 @@ function GlobalStoreContextProvider(props) {
         payload: store.currentList,
       });
     }
+  };
+
+  store.addComment = async function (id, list) {
+    async function updateList(top5List) {
+      let response = await api.updateTop5ListById(top5List._id, top5List);
+      if (response.data.success) {
+        async function getListPairs(top5List) {
+          response = await api.getTop5ListPairs();
+          if (response.data.success) {
+            let pairsArray = response.data.idNamePairs;
+            storeReducer({
+              type: GlobalStoreActionType.CHANGE_LIST_NAME,
+              payload: {
+                idNamePairs: pairsArray,
+                top5List: top5List,
+              },
+            });
+          }
+        }
+        getListPairs(top5List);
+      }
+    }
+    updateList(list);
   };
 
   store.undo = function () {

@@ -3,6 +3,7 @@ const User = require("../models/user-model");
 
 createTop5List = (req, res) => {
   const body = req.body;
+  console.log(body);
   if (!body) {
     return res.status(400).json({
       success: false,
@@ -34,6 +35,7 @@ createTop5List = (req, res) => {
 };
 
 updateTop5List = async (req, res) => {
+  console.log("update started");
   const body = req.body;
   console.log("updateTop5List: " + JSON.stringify(body));
   if (!body) {
@@ -54,6 +56,10 @@ updateTop5List = async (req, res) => {
 
     top5List.name = body.name;
     top5List.items = body.items;
+    if (body.comments) {
+      top5List.comments = body.comments;
+    }
+
     top5List
       .save()
       .then(() => {
@@ -148,6 +154,14 @@ getTop5ListPairs = async (req, res) => {
         let pair = {
           _id: list._id,
           name: list.name,
+          ownerEmail: list.ownerEmail,
+          username: list.username,
+          likes: list.likes,
+          dislikes: list.dislikes,
+          views: list.views,
+          public: list.public,
+          items: list.items,
+          comments: list.comments,
         };
         pairs.push(pair);
       }
