@@ -31,6 +31,7 @@ export const GlobalStoreActionType = {
   SET_MENU: "SET_MENU",
   SET_QUERY: "SET_QUERY",
   SET_SORT: "SET_SORT",
+  LOAD_AGG_LISTS: "LOAD_AGG_LISTS",
 };
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -50,6 +51,7 @@ function GlobalStoreContextProvider(props) {
     currentMenu: 1,
     searchQuery: "",
     sortMode: 0,
+    aggLists: [],
   });
   const history = useHistory();
 
@@ -73,6 +75,7 @@ function GlobalStoreContextProvider(props) {
           currentMenu: store.currentMenu,
           searchQuery: store.searchQuery,
           sortMode: store.sortMode,
+          aggLists: store.aggLists,
         });
       }
       // STOP EDITING THE CURRENT LIST
@@ -87,6 +90,7 @@ function GlobalStoreContextProvider(props) {
           currentMenu: store.currentMenu,
           searchQuery: store.searchQuery,
           sortMode: store.sortMode,
+          aggLists: store.aggLists,
         });
       }
       // CREATE A NEW LIST
@@ -101,6 +105,7 @@ function GlobalStoreContextProvider(props) {
           currentMenu: store.currentMenu,
           searchQuery: store.searchQuery,
           sortMode: store.sortMode,
+          aggLists: store.aggLists,
         });
       }
       // GET ALL THE LISTS SO WE CAN PRESENT THEM
@@ -115,6 +120,7 @@ function GlobalStoreContextProvider(props) {
           currentMenu: store.currentMenu,
           searchQuery: store.searchQuery,
           sortMode: store.sortMode,
+          aggLists: store.aggLists,
         });
       }
       // PREPARE TO DELETE A LIST
@@ -129,6 +135,7 @@ function GlobalStoreContextProvider(props) {
           currentMenu: store.currentMenu,
           searchQuery: store.searchQuery,
           sortMode: store.sortMode,
+          aggLists: store.aggLists,
         });
       }
       // PREPARE TO DELETE A LIST
@@ -143,6 +150,7 @@ function GlobalStoreContextProvider(props) {
           currentMenu: store.currentMenu,
           searchQuery: store.searchQuery,
           sortMode: store.sortMode,
+          aggLists: store.aggLists,
         });
       }
       // UPDATE A LIST
@@ -157,6 +165,7 @@ function GlobalStoreContextProvider(props) {
           currentMenu: store.currentMenu,
           searchQuery: store.searchQuery,
           sortMode: store.sortMode,
+          aggLists: store.aggLists,
         });
       }
       // START EDITING A LIST ITEM
@@ -171,6 +180,7 @@ function GlobalStoreContextProvider(props) {
           currentMenu: store.currentMenu,
           searchQuery: store.searchQuery,
           sortMode: store.sortMode,
+          aggLists: store.aggLists,
         });
       }
       // START EDITING A LIST NAME
@@ -185,6 +195,7 @@ function GlobalStoreContextProvider(props) {
           currentMenu: store.currentMenu,
           searchQuery: store.searchQuery,
           sortMode: store.sortMode,
+          aggLists: store.aggLists,
         });
       }
       case GlobalStoreActionType.RESET_COUNTER: {
@@ -198,6 +209,7 @@ function GlobalStoreContextProvider(props) {
           currentMenu: store.currentMenu,
           searchQuery: store.searchQuery,
           sortMode: store.sortMode,
+          aggLists: store.aggLists,
         });
       }
       case GlobalStoreActionType.SET_MENU: {
@@ -211,6 +223,7 @@ function GlobalStoreContextProvider(props) {
           currentMenu: payload,
           searchQuery: store.searchQuery,
           sortMode: store.sortMode,
+          aggLists: store.aggLists,
         });
       }
       case GlobalStoreActionType.SET_QUERY: {
@@ -224,6 +237,7 @@ function GlobalStoreContextProvider(props) {
           currentMenu: store.currentMenu,
           searchQuery: payload,
           sortMode: store.sortMode,
+          aggLists: store.aggLists,
         });
       }
       case GlobalStoreActionType.SET_SORT: {
@@ -237,6 +251,21 @@ function GlobalStoreContextProvider(props) {
           currentMenu: store.currentMenu,
           searchQuery: store.searchQuery,
           sortMode: payload,
+          aggLists: store.aggLists,
+        });
+      }
+      case GlobalStoreActionType.LOAD_AGG_LISTS: {
+        return setStore({
+          idNamePairs: store.idNamePairs,
+          currentList: store.currentList,
+          newListCounter: store.newListCounter,
+          listNameActive: store.listNameActive,
+          itemActive: store.itemActive,
+          listMarkedForDeletion: store.listMarkedForDeletion,
+          currentMenu: store.currentMenu,
+          searchQuery: store.searchQuery,
+          sortMode: store.sortMode,
+          aggLists: payload,
         });
       }
       default:
@@ -363,6 +392,18 @@ function GlobalStoreContextProvider(props) {
 
   store.deleteMarkedList = function () {
     store.deleteList(store.listMarkedForDeletion);
+  };
+
+  store.getAggLists = async function () {
+    console.log("starting");
+    const response = await api.getAggLists();
+    if (response.data.success) {
+      let agglists = response.data.data;
+      storeReducer({
+        type: GlobalStoreActionType.MARK_LIST_FOR_DELETION,
+        payload: agglists,
+      });
+    }
   };
 
   store.unmarkListForDeletion = function () {

@@ -494,7 +494,7 @@ function ListCard(props) {
                     >
                       {idNamePair.dislikes.length}
                     </Typography>
-                    {delete2()}
+                    {delete1()}
                   </Stack>
                 </Box>
               </Stack>

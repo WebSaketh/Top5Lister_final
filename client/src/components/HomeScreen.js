@@ -16,6 +16,7 @@ const HomeScreen = () => {
   const { auth } = useContext(AuthContext);
   useEffect(() => {
     store.loadIdNamePairs();
+    store.getAggLists();
   }, []);
 
   function handleCreateNewList() {

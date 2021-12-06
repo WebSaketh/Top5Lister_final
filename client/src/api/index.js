@@ -33,6 +33,9 @@ export const getLoggedIn = () => api.get(`/loggedIn/`);
 export const registerUser = (payload) => api.post(`/register/`, payload);
 export const loginUser = (payload) => api.post(`/login/`, payload);
 export const logoutUser = (payload) => api.post(`/logout/`, payload);
+export const updateAggListbyId = (id, payload) =>
+  api.put(`/agglist/${id}`, payload);
+export const getAggLists = () => api.get(`/agglist/`);
 
 const apis = {
   createTop5List,
@@ -41,7 +44,8 @@ const apis = {
   updateTop5ListById,
   deleteTop5ListById,
   getTop5ListById,
-
+  updateAggListbyId,
+  getAggLists,
   getLoggedIn,
   registerUser,
   loginUser,
