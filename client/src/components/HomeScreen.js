@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { GlobalStoreContext } from "../store";
 import ListCard from "./ListCard.js";
 import ListCard2 from "./ListCard2.js";
@@ -14,11 +14,22 @@ import AuthContext from "../auth";
 */
 const HomeScreen = () => {
   const { store } = useContext(GlobalStoreContext);
+
+  const [aggLists, setAggLists] = useState();
   const { auth } = useContext(AuthContext);
   useEffect(() => {
-    store.loadIdNamePairs();
-    store.fetchAggLists();
+    loadData();
   }, []);
+
+  async function loadData() {
+    await store.loadIdNamePairs();
+    await store.fetchAggLists();
+  }
+
+  useEffect(() => {
+    console.log(store.aggLists);
+    setAggLists(store.aggLists);
+  }, [store.aggLists]);
 
   function handleCreateNewList() {
     store.createNewList();
@@ -95,6 +106,7 @@ const HomeScreen = () => {
     );
   }
   if (store.currentMenu == 4) {
+    console.log("in current menu 4", store);
     return (
       <div>
         <LoadMenu />
@@ -109,7 +121,7 @@ const HomeScreen = () => {
                 pu: 0,
               }}
             >
-              {store.aggLists.map((pair) => (
+              {aggLists.map((pair) => (
                 <ListCard2 key={pair._id} idNamePair={pair} selected={false} />
               ))}
             </List>
