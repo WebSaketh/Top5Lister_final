@@ -40,10 +40,8 @@ function ListCard(props) {
     e.preventDefault();
     console.log(idNamePair);
     const formData = new FormData(e.currentTarget);
-    console.log(auth.user);
     let comment = auth.user.user + "@" + formData.get("comment");
-    idNamePair.comments.push(comment);
-    store.addComment(idNamePair._id, idNamePair);
+    store.addComment(idNamePair._id, comment);
   }
 
   function handleToggleEdit(event) {
@@ -61,18 +59,24 @@ function ListCard(props) {
         <Box
           style={{
             backgroundColor: "gold",
-            borderRadius: "5px",
+            borderRadius: "15px",
             fontSize: "20pt",
             fontWeight: "bold",
             fontFamily: "Arial, Helvetica, sans-serif",
             color: "darkBlue",
             borderStyle: "solid",
             borderColor: "black",
-            borderWidth: "2px",
+            borderWidth: "1px",
+            boxShadow: "0px 1px #888888",
           }}
-          sx={{ p: 1.0, mb: 1, ml: 1, mr: 1 }}
+          sx={{ p: 1.5, px: 2, mb: 1, ml: 1, mr: 1 }}
         >
-          {comment}
+          <Typography style={{ color: "blue", textDecoration: "underline" }}>
+            {comment.substring(0, comment.indexOf("@"))}
+          </Typography>
+          <Typography style={{ color: "black", fontSize: "15pt" }}>
+            {comment.substring(comment.indexOf("@") + 1)}
+          </Typography>
         </Box>
       </li>
     ));
@@ -82,6 +86,7 @@ function ListCard(props) {
   }
 
   function makeOpen() {
+    store.incrementVote(idNamePair._id);
     setOpen(true);
   }
   function makeClose() {
@@ -326,11 +331,11 @@ function ListCard(props) {
           <Stack sx={{ p: 0.0, pt: 0.5, flexGrow: 1 }}>
             <div>
               <Stack direction="row">
-                <Box sx={{ p: 1, flexGrow: 1 }}>
+                <Box sx={{ p: 1, flexGrow: 1, ml: 1 }}>
                   <Typography variant="h5" style={{ fontWeight: "bold" }}>
                     {idNamePair.name}
                   </Typography>
-                  <Stack sx={{ p: 1 }} direction="row">
+                  <Stack sx={{ py: 0.5, pl: 0.2 }} direction="row">
                     <Typography
                       style={{ fontSize: "12px", fontWeight: "bold" }}
                     >
@@ -404,11 +409,11 @@ function ListCard(props) {
             <div>
               <Stack direction="row">
                 <Box
-                  sx={{ p: 1, pr: 1 }}
+                  sx={{ p: 1, pr: 0, ml: 2 }}
                   style={{
                     backgroundColor: "darkBlue",
                     borderRadius: "5px",
-                    fontSize: "20pt",
+                    fontSize: "25pt",
                     fontWeight: "bold",
                     fontFamily: "Arial, Helvetica, sans-serif",
                     color: "gold",
@@ -416,19 +421,19 @@ function ListCard(props) {
                     width: "50%",
                   }}
                 >
-                  <Box sx={{ p: 0.5, pb: 1, flexGrow: 1, pr: 1 }}>
+                  <Box sx={{ p: 0.5, pb: 1, flexGrow: 1, pr: 1, py: 1.5 }}>
                     1. {idNamePair.items[0]}
                   </Box>
-                  <Box sx={{ p: 0.5, pb: 1, flexGrow: 1, pr: 1 }}>
+                  <Box sx={{ p: 0.5, pb: 1, flexGrow: 1, pr: 1, py: 1.5 }}>
                     2. {idNamePair.items[1]}
                   </Box>
-                  <Box sx={{ p: 0.5, pb: 1, flexGrow: 1, pr: 1 }}>
+                  <Box sx={{ p: 0.5, pb: 1, flexGrow: 1, pr: 1, py: 1.5 }}>
                     3. {idNamePair.items[2]}
                   </Box>
-                  <Box sx={{ p: 0.5, pb: 1, flexGrow: 1, pr: 1 }}>
+                  <Box sx={{ p: 0.5, pb: 1, flexGrow: 1, pr: 1, py: 1.5 }}>
                     4. {idNamePair.items[3]}
                   </Box>
-                  <Box sx={{ p: 0.5, pb: 1, flexGrow: 1, pr: 1 }}>
+                  <Box sx={{ p: 0.5, pb: 1, flexGrow: 1, pr: 1, py: 1.5 }}>
                     5. {idNamePair.items[4]}
                   </Box>
                 </Box>
@@ -451,8 +456,8 @@ function ListCard(props) {
                       width: "100%",
                       overflow: "scroll",
                       overflowX: "hidden",
-                      minHeight: 195,
-                      maxHeight: 195,
+                      minHeight: 300,
+                      maxHeight: 300,
                     }}
                     elevation={0}
                   >
@@ -484,7 +489,7 @@ function ListCard(props) {
             <div>
               <Stack direction="row">
                 <Typography
-                  sx={{ p: 0.0, flexGrow: 1 }}
+                  sx={{ p: 0.0, flexGrow: 1, ml: 2 }}
                   style={{
                     fontSize: "12px",
                     fontWeight: "bold",

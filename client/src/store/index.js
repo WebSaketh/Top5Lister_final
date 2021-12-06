@@ -465,7 +465,7 @@ function GlobalStoreContextProvider(props) {
     }
   };
 
-  store.addComment = async function (id, list) {
+  store.addComment = async function (id, comment) {
     async function updateList(top5List) {
       let response = await api.updateTop5ListById(top5List._id, top5List);
       if (response.data.success) {
@@ -485,6 +485,38 @@ function GlobalStoreContextProvider(props) {
         getListPairs(top5List);
       }
     }
+
+    const response = await api.getTop5ListById(id);
+    let list = response.data.top5List;
+    list.comments.push(comment);
+    updateList(list);
+  };
+
+  store.incrementVote = async function (id) {
+    async function updateList(top5List) {
+      let response = await api.updateTop5ListById(top5List._id, top5List);
+      if (response.data.success) {
+        async function getListPairs(top5List) {
+          response = await api.getTop5ListPairs();
+          if (response.data.success) {
+            let pairsArray = response.data.idNamePairs;
+            storeReducer({
+              type: GlobalStoreActionType.CHANGE_LIST_NAME,
+              payload: {
+                idNamePairs: pairsArray,
+                top5List: top5List,
+              },
+            });
+          }
+        }
+        getListPairs(top5List);
+      }
+    }
+
+    const response = await api.getTop5ListById(id);
+    let list = response.data.top5List;
+    list.views++;
+    console.log(list);
     updateList(list);
   };
 

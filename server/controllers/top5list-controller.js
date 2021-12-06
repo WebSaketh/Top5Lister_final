@@ -59,7 +59,15 @@ updateTop5List = async (req, res) => {
     if (body.comments) {
       top5List.comments = body.comments;
     }
-
+    if (body.likes) {
+      top5List.likes = body.likes;
+    }
+    if (body.dislikes) {
+      top5List.dislikes = body.dislikes;
+    }
+    if (body.views) {
+      top5List.views = body.views;
+    }
     top5List
       .save()
       .then(() => {
