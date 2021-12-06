@@ -519,7 +519,86 @@ function GlobalStoreContextProvider(props) {
     console.log(list);
     updateList(list);
   };
+  store.setLike = async function (id) {
+    async function updateList(top5List) {
+      let response = await api.updateTop5ListById(top5List._id, top5List);
+      if (response.data.success) {
+        async function getListPairs(top5List) {
+          response = await api.getTop5ListPairs();
+          if (response.data.success) {
+            let pairsArray = response.data.idNamePairs;
+            storeReducer({
+              type: GlobalStoreActionType.CHANGE_LIST_NAME,
+              payload: {
+                idNamePairs: pairsArray,
+                top5List: top5List,
+              },
+            });
+          }
+        }
+        getListPairs(top5List);
+      }
+    }
 
+    const response = await api.getTop5ListById(id);
+    let list = response.data.top5List;
+    console.log(auth.user.username);
+    if (list.dislikes.includes(auth.user.username)) {
+      list.dislikes = list.dislikes.filter(function (name) {
+        return name !== auth.user.username;
+      });
+      list.likes.push(auth.user.username);
+      updateList(list);
+    } else if (list.likes.includes(auth.user.username)) {
+      list.likes = list.likes.filter(function (name) {
+        return name !== auth.user.username;
+      });
+      updateList(list);
+    } else {
+      list.likes.push(auth.user.username);
+      updateList(list);
+    }
+  };
+  store.setDislike = async function (id) {
+    async function updateList(top5List) {
+      let response = await api.updateTop5ListById(top5List._id, top5List);
+      if (response.data.success) {
+        async function getListPairs(top5List) {
+          response = await api.getTop5ListPairs();
+          if (response.data.success) {
+            let pairsArray = response.data.idNamePairs;
+            storeReducer({
+              type: GlobalStoreActionType.CHANGE_LIST_NAME,
+              payload: {
+                idNamePairs: pairsArray,
+                top5List: top5List,
+              },
+            });
+          }
+        }
+        getListPairs(top5List);
+      }
+    }
+
+    const response = await api.getTop5ListById(id);
+    let list = response.data.top5List;
+    console.log(auth.user.username);
+    if (list.likes.includes(auth.user.username)) {
+      list.likes = list.likes.filter(function (name) {
+        return name !== auth.user.username;
+      });
+      list.dislikes.push(auth.user.username);
+      updateList(list);
+    } else if (list.dislikes.includes(auth.user.username)) {
+      list.dislikes = list.dislikes.filter(function (name) {
+        return name !== auth.user.username;
+      });
+      updateList(list);
+    } else {
+      list.dislikes.push(auth.user.username);
+      updateList(list);
+    }
+  };
   store.undo = function () {
     tps.undoTransaction();
   };

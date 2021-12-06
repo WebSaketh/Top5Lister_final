@@ -13,7 +13,7 @@ getLoggedIn = async (req, res) => {
           firstName: loggedInUser.firstName,
           lastName: loggedInUser.lastName,
           email: loggedInUser.email,
-          user: loggedInUser.username,
+          username: loggedInUser.username,
         },
       })
       .send();

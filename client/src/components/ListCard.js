@@ -16,6 +16,8 @@ import KeyboardArrowUpOutlinedIcon from "@mui/icons-material/KeyboardArrowUpOutl
 import { InputBase, Paper } from "@mui/material";
 import { FixedSizeList } from "react-window";
 import AuthContext from "../auth";
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 /*
     This is a card in our list of top 5 lists. It lets select
     a list for editing and it has controls for changing its 
@@ -102,10 +104,34 @@ function ListCard(props) {
     setEditActive(newActive);
   }
 
+  function setLike() {
+    store.setLike(idNamePair._id);
+  }
+  function setDislike() {
+    store.setDislike(idNamePair._id);
+  }
   async function handleDeleteList(ev, id) {
     ev.preventDefault();
     ev.stopPropagation();
     await store.markListForDeletion(id);
+  }
+
+  function likeIcon() {
+    if (idNamePair.likes.includes(auth.user.username)) {
+      return <ThumbUpIcon style={{ color: "black", fontSize: "40pt" }} />;
+    }
+    return (
+      <ThumbUpOffAltOutlinedIcon style={{ color: "black", fontSize: "40pt" }} />
+    );
+  }
+
+  function dislikeIcon() {
+    if (idNamePair.dislikes.includes(auth.user.username)) {
+      return <ThumbDownIcon style={{ color: "black", fontSize: "40pt" }} />;
+    }
+    return (
+      <ThumbDownAltOutlinedIcon style={{ color: "black", fontSize: "40pt" }} />
+    );
   }
 
   async function confirmDelete(ev) {
@@ -207,10 +233,8 @@ function ListCard(props) {
       <Box sx={{ p: 0.0 }}>
         <Box sx={{ p: 0.0 }}>
           <Stack direction="row">
-            <IconButton aria-label="like">
-              <ThumbUpOffAltOutlinedIcon
-                style={{ color: "black", fontSize: "40pt" }}
-              />
+            <IconButton aria-label="like" onClick={setLike}>
+              {likeIcon()}
             </IconButton>
 
             <Typography
@@ -226,10 +250,8 @@ function ListCard(props) {
               {idNamePair.likes.length}
             </Typography>
 
-            <IconButton aria-label="dislike">
-              <ThumbDownAltOutlinedIcon
-                style={{ color: "black", fontSize: "35pt" }}
-              />
+            <IconButton aria-label="dislike" onClick={setDislike}>
+              {dislikeIcon()}
             </IconButton>
 
             <Typography
@@ -355,10 +377,8 @@ function ListCard(props) {
                 </Box>
                 <Box>
                   <Stack direction="row">
-                    <IconButton aria-label="like">
-                      <ThumbUpOffAltOutlinedIcon
-                        style={{ color: "black", fontSize: "40pt" }}
-                      />
+                    <IconButton aria-label="like" onClick={setLike}>
+                      {likeIcon()}
                     </IconButton>
 
                     <Typography
@@ -374,10 +394,8 @@ function ListCard(props) {
                       {idNamePair.likes.length}
                     </Typography>
 
-                    <IconButton aria-label="dislike">
-                      <ThumbDownAltOutlinedIcon
-                        style={{ color: "black", fontSize: "35pt" }}
-                      />
+                    <IconButton aria-label="dislike" onClick={setDislike}>
+                      {dislikeIcon()}
                     </IconButton>
 
                     <Typography
