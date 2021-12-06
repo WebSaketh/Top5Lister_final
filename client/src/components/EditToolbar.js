@@ -30,26 +30,11 @@ function EditToolbar() {
   return (
     <div id="edit-toolbar">
       <Button
-        id="undo-button"
-        disabled={!store.canUndo() || store.isItemEditActive}
-        onClick={handleUndo}
-        variant="contained"
-      >
-        <UndoIcon />
-      </Button>
-      <Button
-        id="redo-button"
-        disabled={!store.canRedo()}
-        onClick={handleRedo}
-        variant="contained"
-      >
-        <RedoIcon />
-      </Button>
-      <Button
         disabled={editStatus}
         id="close-button"
         onClick={handleClose}
         variant="contained"
+        style={{ backgroundColor: "darkred" }}
       >
         <CloseIcon />
       </Button>

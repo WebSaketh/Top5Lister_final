@@ -295,7 +295,7 @@ function GlobalStoreContextProvider(props) {
       name: newListName,
       items: ["1", "2", "3", "4", "5"],
       ownerEmail: auth.user.email,
-      username: auth.user.user,
+      username: auth.user.username,
       likes: [],
       dislikes: [],
       views: 0,
@@ -390,6 +390,14 @@ function GlobalStoreContextProvider(props) {
         history.push("/top5list/" + top5List._id);
       }
     }
+  };
+
+  store.editCurrentList = function (top5List) {
+    storeReducer({
+      type: GlobalStoreActionType.SET_CURRENT_LIST,
+      payload: top5List,
+    });
+    history.push("/top5list/" + top5List._id);
   };
 
   store.addMoveItemTransaction = function (start, end) {

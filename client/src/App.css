@@ -143,9 +143,9 @@ body {
 #top5-workspace {
   position: absolute;
   left: 0%;
-  top: 10%;
+  top: 23%;
   width: 100%;
-  height: 80%;
+  height: 55%;
   background-color: var(--swatch-accent);
 }
 

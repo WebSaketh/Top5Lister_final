@@ -6,6 +6,8 @@ import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
 import FunctionsOutlinedIcon from "@mui/icons-material/FunctionsOutlined";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import SortIcon from "@mui/icons-material/Sort";
 
 import { InputBase, Paper, Stack, Typography } from "@mui/material";
 import SortMenu from "./SortMenu";
@@ -115,6 +117,123 @@ function LoadMenu(props) {
     store.updateQuery(formData.get("search"));
     document.getElementByid("root").focus();
   }
+
+  if (props.disabled) {
+    return (
+      <div id="loadMenu">
+        <Stack direction="row" spacing={2}>
+          <ButtonUnstyled
+            onClick={setHome}
+            className="loadMenuButton"
+            style={{
+              borderWidth: "2px",
+              borderStyle: "solid",
+              borderColor: "transparent",
+              color: "black",
+              backgroundColor: "transparent",
+            }}
+          >
+            <HomeOutlinedIcon fontSize="large" color="disabled" />
+          </ButtonUnstyled>
+          <ButtonUnstyled
+            onClick={setAll}
+            className="loadMenuButton"
+            style={{
+              borderWidth: "2px",
+              borderStyle: "solid",
+              borderColor: "transparent",
+              color: "black",
+              backgroundColor: "transparent",
+            }}
+          >
+            <GroupsOutlinedIcon fontSize="large" color="disabled" />
+          </ButtonUnstyled>
+          <ButtonUnstyled
+            onClick={setUser}
+            className="loadMenuButton"
+            style={{
+              borderWidth: "2px",
+              borderStyle: "solid",
+              borderColor: "transparent",
+              color: "black",
+              backgroundColor: "transparent",
+            }}
+          >
+            <PersonOutlineOutlinedIcon fontSize="large" color="disabled" />
+          </ButtonUnstyled>
+          <ButtonUnstyled
+            onClick={setAgg}
+            className="loadMenuButton"
+            style={{
+              borderWidth: "2px",
+              borderStyle: "solid",
+              borderColor: "transparent",
+              color: "black",
+              backgroundColor: "transparent",
+            }}
+          >
+            <FunctionsOutlinedIcon fontSize="large" color="disabled" />
+          </ButtonUnstyled>
+          <Paper
+            component="form"
+            sx={{
+              p: "2px 2px",
+              display: "flex",
+              alignItems: "center",
+              width: 350,
+            }}
+            elevation={0}
+            onSubmit={formSubmitHandler}
+          >
+            <InputBase
+              sx={{ ml: 1, flex: 1 }}
+              placeholder="Search"
+              inputProps={{ "aria-label": "search" }}
+              name="search"
+              //label="Password"
+              type="text"
+              id="search"
+              disabled={true}
+            />
+          </Paper>
+          <Stack
+            direction="row"
+            spacing={1}
+            style={{ marginLeft: "auto", marginRight: 0 }}
+          >
+            <Box
+              // style={{ width: "50%", margin: "0" }}
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <Typography
+                style={{ fontWeight: "bold", fontSize: "20px", color: "grey" }}
+              >
+                SORT BY
+              </Typography>
+            </Box>
+            <Box
+              // style={{ width: "50%", margin: "0" }}
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <Button
+                id="basic-button"
+                aria-controls="basic-menu"
+                aria-haspopup="true"
+                disabled="true"
+              >
+                <SortIcon style={{ color: "grey" }}></SortIcon>
+              </Button>
+            </Box>
+          </Stack>
+        </Stack>
+      </div>
+    );
+  }
+
   return (
     <div id="loadMenu">
       <Stack direction="row" spacing={2}>
