@@ -127,6 +127,109 @@ function ListCard(props) {
     );
   }
 
+  const editText1 = function () {
+    if (auth.user.username !== idNamePair.username) {
+      return (
+        <Typography
+          style={{
+            fontSize: "12px",
+            fontWeight: "bold",
+            textDecoration: "underline",
+            color: "red",
+          }}
+        ></Typography>
+      );
+    }
+    return (
+      <Typography
+        style={{
+          fontSize: "12px",
+          fontWeight: "bold",
+          textDecoration: "underline",
+          color: "red",
+        }}
+        onClick={(event) => {
+          handleLoadList(event, idNamePair._id);
+        }}
+      >
+        EDIT
+      </Typography>
+    );
+  };
+
+  const editText2 = function () {
+    if (auth.user.username !== idNamePair.username) {
+      return (
+        <Typography
+          sx={{ p: 0.0, flexGrow: 1, ml: 2 }}
+          style={{
+            fontSize: "12px",
+            fontWeight: "bold",
+            textDecoration: "underline",
+            color: "red",
+            display: "flex",
+            alignItems: "center",
+          }}
+        ></Typography>
+      );
+    }
+    return (
+      <Typography
+        sx={{ p: 0.0, flexGrow: 1, ml: 2 }}
+        style={{
+          fontSize: "12px",
+          fontWeight: "bold",
+          textDecoration: "underline",
+          color: "red",
+          display: "flex",
+          alignItems: "center",
+        }}
+        onClick={(event) => {
+          handleLoadList(event, idNamePair._id);
+        }}
+      >
+        EDIT
+      </Typography>
+    );
+  };
+
+  const delete1 = function () {
+    if (idNamePair.username != auth.user.username) {
+      return (
+        <IconButton aria-label="delete" disabled={true}>
+          <DeleteIcon style={{ color: "transparent", fontSize: "35pt" }} />
+        </IconButton>
+      );
+    }
+    return (
+      <IconButton
+        onClick={(event) => {
+          handleDeleteList(event, idNamePair._id);
+        }}
+        aria-label="delete"
+      >
+        <DeleteIcon style={{ color: "black", fontSize: "35pt" }} />
+      </IconButton>
+    );
+  };
+  const delete2 = function () {
+    return (
+      <IconButton aria-label="delete" disabled={true}>
+        <DeleteIcon style={{ color: "transparent", fontSize: "35pt" }} />
+      </IconButton>
+    );
+    return (
+      <IconButton
+        onClick={(event) => {
+          handleDeleteList(event, idNamePair._id);
+        }}
+        aria-label="delete"
+      >
+        <DeleteIcon style={{ color: "black", fontSize: "35pt" }} />
+      </IconButton>
+    );
+  };
+
   function dislikeIcon() {
     if (idNamePair.dislikes.includes(auth.user.username)) {
       return <ThumbDownIcon style={{ color: "black", fontSize: "40pt" }} />;
@@ -211,21 +314,7 @@ function ListCard(props) {
             </Typography>
           </Stack>
         </Box>
-        <Box sx={{ p: 0.5, flexGrow: 1 }}>
-          <Typography
-            style={{
-              fontSize: "12px",
-              fontWeight: "bold",
-              textDecoration: "underline",
-              color: "red",
-            }}
-            onClick={(event) => {
-              handleLoadList(event, idNamePair._id);
-            }}
-          >
-            EDIT
-          </Typography>
-        </Box>
+        <Box sx={{ p: 0.5, flexGrow: 1 }}>{editText1()}</Box>
       </Box>
       {/* <Box sx={{ p: 1 }}>
         <IconButton onClick={handleToggleEdit} aria-label="edit">
@@ -269,14 +358,7 @@ function ListCard(props) {
               {idNamePair.dislikes.length}
             </Typography>
 
-            <IconButton
-              onClick={(event) => {
-                handleDeleteList(event, idNamePair._id);
-              }}
-              aria-label="delete"
-            >
-              <DeleteIcon style={{ color: "black", fontSize: "35pt" }} />
-            </IconButton>
+            {delete1()}
           </Stack>
         </Box>
 
@@ -412,16 +494,7 @@ function ListCard(props) {
                     >
                       {idNamePair.dislikes.length}
                     </Typography>
-                    <IconButton
-                      onClick={(event) => {
-                        handleDeleteList(event, idNamePair._id);
-                      }}
-                      aria-label="delete"
-                    >
-                      <DeleteIcon
-                        style={{ color: "black", fontSize: "35pt" }}
-                      />
-                    </IconButton>
+                    {delete2()}
                   </Stack>
                 </Box>
               </Stack>
@@ -508,22 +581,7 @@ function ListCard(props) {
             </div>
             <div>
               <Stack direction="row">
-                <Typography
-                  sx={{ p: 0.0, flexGrow: 1, ml: 2 }}
-                  style={{
-                    fontSize: "12px",
-                    fontWeight: "bold",
-                    textDecoration: "underline",
-                    color: "red",
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                  onClick={(event) => {
-                    handleLoadList(event, idNamePair._id);
-                  }}
-                >
-                  EDIT
-                </Typography>
+                {editText2()}
                 <Typography
                   sx={{ p: 0.0, flexGrow: 1 }}
                   style={{
@@ -709,15 +767,7 @@ function ListCard(props) {
               >
                 {idNamePair.dislikes.length}
               </Typography>
-
-              <IconButton
-                onClick={(event) => {
-                  handleDeleteList(event, idNamePair._id);
-                }}
-                aria-label="delete"
-              >
-                <DeleteIcon style={{ color: "black", fontSize: "35pt" }} />
-              </IconButton>
+              {delete1()}
             </Stack>
           </Box>
 
@@ -850,14 +900,7 @@ function ListCard(props) {
                   >
                     {idNamePair.dislikes.length}
                   </Typography>
-                  <IconButton
-                    onClick={(event) => {
-                      handleDeleteList(event, idNamePair._id);
-                    }}
-                    aria-label="delete"
-                  >
-                    <DeleteIcon style={{ color: "black", fontSize: "35pt" }} />
-                  </IconButton>
+                  {delete2()}
                 </Stack>
               </Box>
             </Stack>
