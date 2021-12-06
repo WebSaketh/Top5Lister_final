@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from "react";
 import { GlobalStoreContext } from "../store";
 import ListCard from "./ListCard.js";
+import ListCard2 from "./ListCard2.js";
 import { Fab, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import List from "@mui/material/List";
@@ -16,13 +17,14 @@ const HomeScreen = () => {
   const { auth } = useContext(AuthContext);
   useEffect(() => {
     store.loadIdNamePairs();
-    store.getAggLists();
+    store.fetchAggLists();
   }, []);
 
   function handleCreateNewList() {
     store.createNewList();
   }
   let listCard = "";
+  let listCard2 = "";
   let p = store.idNamePairs;
   if (store.currentMenu == 1) {
     p = p.filter(function (list, index) {
@@ -37,11 +39,6 @@ const HomeScreen = () => {
   if (store.currentMenu == 3) {
     p = p.filter(function (list, index) {
       return list.public;
-    });
-  }
-  if (store.currentMenu == 4) {
-    p = p.filter(function (list, index) {
-      return true;
     });
   }
   if (store.sortMode == 0) {
@@ -87,7 +84,41 @@ const HomeScreen = () => {
         ))}
       </List>
     );
+    listCard2 = (
+      <List
+        sx={{ width: "96%", left: "2%", bgcolor: "transparent", p: 0, pu: 0 }}
+      >
+        {store.aggLists.map((pair) => (
+          <ListCard2 key={pair._id} idNamePair={pair} selected={false} />
+        ))}
+      </List>
+    );
   }
+  if (store.currentMenu == 4) {
+    return (
+      <div>
+        <LoadMenu />
+        <div id="top5-list-selector">
+          <div id="list-selector-list">
+            <List
+              sx={{
+                width: "96%",
+                left: "2%",
+                bgcolor: "transparent",
+                p: 0,
+                pu: 0,
+              }}
+            >
+              {store.aggLists.map((pair) => (
+                <ListCard2 key={pair._id} idNamePair={pair} selected={false} />
+              ))}
+            </List>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div>
       <LoadMenu />

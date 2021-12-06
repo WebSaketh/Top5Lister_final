@@ -256,15 +256,7 @@ function GlobalStoreContextProvider(props) {
       }
       case GlobalStoreActionType.LOAD_AGG_LISTS: {
         return setStore({
-          idNamePairs: store.idNamePairs,
-          currentList: store.currentList,
-          newListCounter: store.newListCounter,
-          listNameActive: store.listNameActive,
-          itemActive: store.itemActive,
-          listMarkedForDeletion: store.listMarkedForDeletion,
-          currentMenu: store.currentMenu,
-          searchQuery: store.searchQuery,
-          sortMode: store.sortMode,
+          ...store,
           aggLists: payload,
         });
       }
@@ -394,13 +386,14 @@ function GlobalStoreContextProvider(props) {
     store.deleteList(store.listMarkedForDeletion);
   };
 
-  store.getAggLists = async function () {
+  store.fetchAggLists = async function () {
     console.log("starting");
     const response = await api.getAggLists();
+    console.log(response);
     if (response.data.success) {
       let agglists = response.data.data;
       storeReducer({
-        type: GlobalStoreActionType.MARK_LIST_FOR_DELETION,
+        type: GlobalStoreActionType.LOAD_AGG_LISTS,
         payload: agglists,
       });
     }
@@ -544,6 +537,7 @@ function GlobalStoreContextProvider(props) {
   };
 
   store.incrementVote = async function (id) {
+    console.log(store.aggLists);
     async function updateList(top5List) {
       let response = await api.updateTop5ListById(top5List._id, top5List);
       if (response.data.success) {
@@ -560,6 +554,7 @@ function GlobalStoreContextProvider(props) {
             });
           }
         }
+
         getListPairs(top5List);
       }
     }
