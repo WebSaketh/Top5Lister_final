@@ -1,5 +1,6 @@
 const Top5List = require("../models/top5list-model");
 const User = require("../models/user-model");
+const AggList = require("../models/aggList-model");
 
 createTop5List = (req, res) => {
   const body = req.body;
@@ -16,7 +17,6 @@ createTop5List = (req, res) => {
   if (!top5List) {
     return res.status(400).json({ success: false, error: err });
   }
-
   top5List
     .save()
     .then(() => {
@@ -33,6 +33,31 @@ createTop5List = (req, res) => {
       });
     });
 };
+decimateAggList = (id) => {
+  const agglist = Top5List.findOne({ _id: id }, function (err, agglist) {
+    console.log("realList", agglist);
+    const aggup = AggList.findOne(
+      { name: agglist.name },
+      function (err, aggup) {
+        console.log("before", aggup.lists);
+        const index = aggup.lists.indexOf(id);
+        if (index > -1) {
+          aggup.lists.splice(index, 1);
+        }
+        console.log("after", aggup.lists);
+        if (aggup.lists.length == 0) {
+          AggList.findByIdAndRemove(aggup.id).exec();
+          return;
+        }
+        AggList.findOneAndUpdate(
+          { name: aggup.name },
+          { lists: aggup.lists },
+          { useFindAndModify: false }
+        ).exec();
+      }
+    );
+  });
+};
 
 updateTop5List = async (req, res) => {
   console.log("update started");
@@ -43,6 +68,9 @@ updateTop5List = async (req, res) => {
       success: false,
       error: "You must provide a body to update",
     });
+  }
+  if (body.public) {
+    await createAggList(body);
   }
 
   Top5List.findOne({ _id: req.params.id }, (err, top5List) => {
@@ -92,6 +120,7 @@ updateTop5List = async (req, res) => {
 };
 
 deleteTop5List = async (req, res) => {
+  decimateAggList(req.params.id);
   const user = await User.findById(req.userId).exec();
   console.log(req.params.id);
   Top5List.findById(
@@ -114,6 +143,37 @@ deleteTop5List = async (req, res) => {
   );
 };
 
+createAggList = async (body) => {
+  console.log(body);
+  const agglist = await AggList.findOne({ name: body.name }).exec();
+  console.log("agglist", agglist);
+  if (agglist == null) {
+    AggList.create(
+      {
+        name: body.name,
+        lists: [body._id],
+        likes: [],
+        dislikes: [],
+        views: 0,
+        comments: [],
+      },
+      function (err, agglist) {
+        if (err) {
+          console.log(err);
+        }
+      }
+    );
+  } else {
+    agglist.lists.push(body._id);
+    console.log("newLists", agglist.lists);
+    AggList.findOneAndUpdate(
+      { name: body.name },
+      { lists: agglist.lists },
+      { useFindAndModify: false }
+    ).exec();
+  }
+};
+
 getTop5ListById = async (req, res) => {
   await Top5List.findById({ _id: req.params.id }, (err, list) => {
     if (err) {
@@ -127,7 +187,6 @@ getTop5ListById = async (req, res) => {
   }).catch((err) => console.log(err));
 };
 getTop5Lists = async (req, res) => {
-  const user = await User.findById(req.userId).exec();
   await Top5List.find({}, (err, top5Lists) => {
     if (err) {
       return res.status(400).json({ success: false, error: err });
@@ -140,6 +199,35 @@ getTop5Lists = async (req, res) => {
     return res.status(200).json({ success: true, data: top5Lists });
   }).catch((err) => console.log(err));
 };
+
+getAggLists = async (req, res) => {
+  await AggList.find({}, (err, agglists) => {
+    if (err) {
+      return res.status(400).json({ success: false, error: err });
+    }
+    if (!agglists.length) {
+      return res
+        .status(404)
+        .json({ success: false, error: `Top 5 Lists not found` });
+    }
+    return res.status(200).json({ success: true, data: agglists });
+  }).catch((err) => console.log(err));
+};
+
+updateAggListbyId = async (req, res) => {
+  const body = req.body;
+  await AggList.findOneAndUpdate(
+    { id: req.params.id },
+    {
+      likes: body.likes,
+      dislikes: body.dislikes,
+      views: body.views,
+      comments: body.comments,
+    },
+    { useFindAndModify: false }
+  ).exec();
+};
+
 getTop5ListPairs = async (req, res) => {
   const user = await User.findById(req.userId).exec();
   await Top5List.find({}, (err, top5Lists) => {
