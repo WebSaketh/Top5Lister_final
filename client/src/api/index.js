@@ -36,6 +36,7 @@ export const logoutUser = (payload) => api.post(`/logout/`, payload);
 export const updateAggListbyId = (id, payload) =>
   api.put(`/agglist/${id}`, payload);
 export const getAggLists = () => api.get(`/agglist/`);
+export const getAggListById = (id) => api.get(`/agglist/${id}`);
 
 const apis = {
   createTop5List,
@@ -50,6 +51,7 @@ const apis = {
   registerUser,
   loginUser,
   logoutUser,
+  getAggListById,
 };
 
 export default apis;

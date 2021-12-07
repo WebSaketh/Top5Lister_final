@@ -568,6 +568,17 @@ function GlobalStoreContextProvider(props) {
     console.log(list);
     updateList(list);
   };
+
+  store.incrementVoteAgg = async function (id) {
+    const aggtoincrement = await api.getAggListById(id);
+    let agglist = aggtoincrement.data.agglist;
+    agglist.views = agglist.views + 1;
+    console.log(agglist);
+    const response = await api.updateAggListbyId(id, agglist);
+    await store.loadIdNamePairs();
+    await store.fetchAggLists();
+  };
+
   store.setLike = async function (id) {
     async function updateList(top5List) {
       let response = await api.updateTop5ListById(top5List._id, top5List);
@@ -607,6 +618,59 @@ function GlobalStoreContextProvider(props) {
       list.likes.push(auth.user.username);
       updateList(list);
     }
+  };
+  store.setLikeAgg = async function (id) {
+    console.log("clicked2");
+    const aggtoincrement = await api.getAggListById(id);
+    let agglist = aggtoincrement.data.agglist;
+    console.log(agglist);
+    let list = agglist;
+    if (list.dislikes.includes(auth.user.username)) {
+      list.dislikes = list.dislikes.filter(function (name) {
+        return name !== auth.user.username;
+      });
+      list.likes.push(auth.user.username);
+    } else if (list.likes.includes(auth.user.username)) {
+      list.likes = list.likes.filter(function (name) {
+        return name !== auth.user.username;
+      });
+    } else {
+      list.likes.push(auth.user.username);
+    }
+    const response = await api.updateAggListbyId(id, list);
+    await store.loadIdNamePairs();
+    await store.fetchAggLists();
+  };
+  store.setDislikeAgg = async function (id) {
+    console.log("clicked2");
+    const aggtoincrement = await api.getAggListById(id);
+    let agglist = aggtoincrement.data.agglist;
+    console.log(agglist);
+    let list = agglist;
+    if (list.likes.includes(auth.user.username)) {
+      list.likes = list.likes.filter(function (name) {
+        return name !== auth.user.username;
+      });
+      list.dislikes.push(auth.user.username);
+    } else if (list.dislikes.includes(auth.user.username)) {
+      list.dislikes = list.dislikes.filter(function (name) {
+        return name !== auth.user.username;
+      });
+    } else {
+      list.dislikes.push(auth.user.username);
+    }
+    const response = await api.updateAggListbyId(id, list);
+    await store.loadIdNamePairs();
+    await store.fetchAggLists();
+  };
+  store.addCommentAgg = async function (id, comment) {
+    const aggtoincrement = await api.getAggListById(id);
+    let agglist = aggtoincrement.data.agglist;
+    agglist.comments.push(comment);
+    console.log(agglist);
+    const response = await api.updateAggListbyId(id, agglist);
+    await store.loadIdNamePairs();
+    await store.fetchAggLists();
   };
   store.setDislike = async function (id) {
     async function updateList(top5List) {

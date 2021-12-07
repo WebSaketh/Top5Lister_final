@@ -58,7 +58,14 @@ decimateAggList = (id) => {
     );
   });
 };
-
+getAggListById = async (req, res) => {
+  await AggList.findById({ _id: req.params.id }, (err, list) => {
+    if (err) {
+      return res.status(400).json({ success: false, error: err });
+    }
+    return res.status(200).json({ success: true, agglist: list });
+  }).catch((err) => console.log(err));
+};
 updateTop5List = async (req, res) => {
   console.log("update started");
   const body = req.body;
@@ -216,16 +223,18 @@ getAggLists = async (req, res) => {
 
 updateAggListbyId = async (req, res) => {
   const body = req.body;
+  console.log(body);
   await AggList.findOneAndUpdate(
-    { id: req.params.id },
+    { name: body.name },
     {
+      views: body.views,
       likes: body.likes,
       dislikes: body.dislikes,
-      views: body.views,
       comments: body.comments,
     },
     { useFindAndModify: false }
   ).exec();
+  return res.status(200).json({ success: true });
 };
 
 getTop5ListPairs = async (req, res) => {
@@ -273,4 +282,5 @@ module.exports = {
   getTop5ListById,
   getAggLists,
   updateAggListbyId,
+  getAggListById,
 };

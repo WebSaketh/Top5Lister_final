@@ -18,4 +18,6 @@ router.get("/loggedIn", UserController.getLoggedIn);
 
 router.get("/agglist", auth.verify, Top5ListController.getAggLists);
 router.put("/agglist/:id", auth.verify, Top5ListController.updateAggListbyId);
+router.get("/agglist/:id", auth.verify, Top5ListController.getAggListById);
+
 module.exports = router;

@@ -43,11 +43,70 @@ export default function ListCard2(props) {
     console.log(idNamePair);
     const formData = new FormData(e.currentTarget);
     let comment = auth.user.username + "@" + formData.get("comment");
-    store.addComment(idNamePair._id, comment);
+    store.addCommentAgg(idNamePair._id, comment);
   }
+  function getNativeList(id) {
+    let val = null;
+    store.idNamePairs.forEach((x) => {
+      if (x._id == id) {
+        val = x;
+      }
+    });
+    return val;
+  }
+  let score = new Map();
+  function incrementMap(item, points) {
+    console.log(item, points);
 
-  return <div> {idNamePair.name}</div>;
-
+    if (score.has(item)) {
+      score.set(item, score.get(item) + points);
+    } else {
+      score.set(item, points);
+    }
+  }
+  if (true) {
+    console.log(idNamePair);
+    idNamePair.lists.forEach((x) => {
+      let listItems = getNativeList(x).items;
+      listItems.forEach((item, index) => {
+        incrementMap(item, 5 - index);
+      });
+    });
+    let one = [null, null];
+    let two = [null, null];
+    let three = [null, null];
+    let four = [null, null];
+    let five = [null, null];
+    score.forEach(function (value, key) {
+      if (value > one[1] || one[1] == null) {
+        five = four;
+        four = three;
+        three = four;
+        two = one;
+        one = [key, value];
+      } else if (value > two[1] || two[1] == null) {
+        five = four;
+        four = three;
+        three = four;
+        two = [key, value];
+      } else if (value > three[1] || three[1] == null) {
+        five = four;
+        four = three;
+        three = [key, value];
+      } else if (value > four[1] || four[1] == null) {
+        five = four;
+        four = [key, value];
+      } else if (value > five[1] || five[1] == null) {
+        five = [key, value];
+      }
+    });
+    console.log(one);
+    console.log(two);
+    console.log(three);
+    console.log(four);
+    console.log(five);
+    idNamePair.items = [one[0], two[0], three[0], four[0], five[0]];
+  }
   function handleToggleEdit(event) {
     event.stopPropagation();
     toggleEdit(event);
@@ -92,7 +151,7 @@ export default function ListCard2(props) {
   }
 
   function makeOpen() {
-    store.incrementVote(idNamePair._id);
+    store.incrementVoteAgg(idNamePair._id);
     setOpen(true);
   }
   function makeClose() {
@@ -109,10 +168,12 @@ export default function ListCard2(props) {
   }
 
   function setLike() {
-    store.setLike(idNamePair._id);
+    console.log("clicked2");
+    console.log(idNamePair._id);
+    store.setLikeAgg(idNamePair._id);
   }
   function setDislike() {
-    store.setDislike(idNamePair._id);
+    store.setDislikeAgg(idNamePair._id);
   }
   async function handleDeleteList(ev, id) {
     ev.preventDefault();
@@ -121,6 +182,8 @@ export default function ListCard2(props) {
   }
 
   function likeIcon() {
+    console.log("likes", idNamePair.likes);
+    console.log("user", auth.user.username);
     if (idNamePair.likes.includes(auth.user.username)) {
       return <ThumbUpIcon style={{ color: "black", fontSize: "40pt" }} />;
     }
@@ -280,7 +343,7 @@ export default function ListCard2(props) {
         fontSize: "48pt",
         width: "100%",
         borderRadius: "15px",
-        backgroundColor: "#FFFFF1",
+        backgroundColor: "#D4D4F5",
         borderStyle: "solid",
         borderWidth: "1px",
         borderColor: "black",
@@ -312,7 +375,7 @@ export default function ListCard2(props) {
                 color: "blue",
               }}
             >
-              {idNamePair.username}
+              The Community!
             </Typography>
           </Stack>
         </Box>
@@ -423,7 +486,7 @@ export default function ListCard2(props) {
             fontSize: "48pt",
             width: "100%",
             borderRadius: "15px",
-            backgroundColor: "#FFFFF1",
+            backgroundColor: "#D4D4F5",
             borderStyle: "solid",
             borderWidth: "1px",
             borderColor: "black",
@@ -457,7 +520,7 @@ export default function ListCard2(props) {
                         color: "blue",
                       }}
                     >
-                      {idNamePair.username}
+                      The Community!
                     </Typography>
                   </Stack>
                 </Box>

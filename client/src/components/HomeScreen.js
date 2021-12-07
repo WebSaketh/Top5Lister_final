@@ -106,6 +106,32 @@ const HomeScreen = () => {
     );
   }
   if (store.currentMenu == 4) {
+    let p = store.aggLists;
+    if (store.sortMode == 0) {
+      p = p.sort((a, b) => b.views - a.views);
+    }
+    if (store.sortMode == 1) {
+      p = p.sort((a, b) => b.likes.length - a.likes.length);
+    }
+    if (store.sortMode == 2) {
+      p = p.sort((a, b) => b.dislikes.length - a.dislikes.length);
+    }
+    if (store.sortMode == 3) {
+      p = p.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+    }
+    if (store.sortMode == 4) {
+      p = p.sort((a, b) => new Date(a.updatedAt) - new Date(b.updatedAt));
+    }
+    if (store.searchQuery != "") {
+      console.log(store.searchQuery, "serach QUesry");
+      let counter = 0;
+      p = p.filter(function (list, index) {
+        return list.name
+          .toLowerCase()
+          .includes(store.searchQuery.toLowerCase());
+      });
+    }
+    console.log("p", p);
     console.log("in current menu 4", store);
     return (
       <div>
@@ -121,7 +147,7 @@ const HomeScreen = () => {
                 pu: 0,
               }}
             >
-              {aggLists.map((pair) => (
+              {p.map((pair) => (
                 <ListCard2 key={pair._id} idNamePair={pair} selected={false} />
               ))}
             </List>
