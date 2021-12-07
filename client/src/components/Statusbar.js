@@ -26,6 +26,15 @@ function Statusbar() {
   if (!auth.user) {
     return <div id="top5-statusbar" />;
   }
+  if (auth) {
+    if (auth.user) {
+      if (auth.user.username) {
+        if (auth.user.username == "Guest") {
+          return <div id="top5-statusbar" />;
+        }
+      }
+    }
+  }
   return (
     <div id="top5-statusbar">
       <Button

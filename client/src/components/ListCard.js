@@ -647,7 +647,6 @@ function ListCard(props) {
       />
     );
   }
-
   if (idNamePair.public) {
     cardElement = (
       <ListItem
@@ -1065,6 +1064,8 @@ function ListCard(props) {
         </Stack>
       </ListItem>
     );
+  }
+  if (store.currentMenu == 4) {
   }
   return cardElement;
 }
