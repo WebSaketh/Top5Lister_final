@@ -105,7 +105,7 @@ export default function ListCard2(props) {
     console.log(three);
     console.log(four);
     console.log(five);
-    idNamePair.items = [one[0], two[0], three[0], four[0], five[0]];
+    idNamePair.items = [one, two, three, four, five];
   }
   function handleToggleEdit(event) {
     event.stopPropagation();
@@ -580,20 +580,35 @@ export default function ListCard2(props) {
                   }}
                 >
                   <Box sx={{ p: 0.5, pb: 1, flexGrow: 1, pr: 1, py: 1.5 }}>
-                    1. {idNamePair.items[0]}
+                    1. {idNamePair.items[0][0]}
                   </Box>
+                  <Typography sx={{ ml: 4 }}>
+                    ({idNamePair.items[0][1]}) votes
+                  </Typography>
                   <Box sx={{ p: 0.5, pb: 1, flexGrow: 1, pr: 1, py: 1.5 }}>
-                    2. {idNamePair.items[1]}
+                    2. {idNamePair.items[1][0]}
                   </Box>
+                  <Typography sx={{ ml: 4 }}>
+                    ({idNamePair.items[1][1]}) votes
+                  </Typography>
                   <Box sx={{ p: 0.5, pb: 1, flexGrow: 1, pr: 1, py: 1.5 }}>
-                    3. {idNamePair.items[2]}
+                    3. {idNamePair.items[2][0]}
                   </Box>
+                  <Typography sx={{ ml: 4 }}>
+                    ({idNamePair.items[2][1]}) votes
+                  </Typography>
                   <Box sx={{ p: 0.5, pb: 1, flexGrow: 1, pr: 1, py: 1.5 }}>
-                    4. {idNamePair.items[3]}
+                    4. {idNamePair.items[3][0]}
                   </Box>
+                  <Typography sx={{ ml: 4 }}>
+                    ({idNamePair.items[3][1]}) votes
+                  </Typography>
                   <Box sx={{ p: 0.5, pb: 1, flexGrow: 1, pr: 1, py: 1.5 }}>
-                    5. {idNamePair.items[4]}
+                    5. {idNamePair.items[4][0]}
                   </Box>
+                  <Typography sx={{ ml: 4 }}>
+                    ({idNamePair.items[4][1]}) votes
+                  </Typography>
                 </Box>
                 <Stack
                   style={{
@@ -988,18 +1003,23 @@ export default function ListCard2(props) {
                 <Box sx={{ p: 0.5, pb: 1, flexGrow: 1, pr: 1, py: 1.5 }}>
                   1. {idNamePair.items[0]}
                 </Box>
+                <Typography>{idNamePair.votes[1]}</Typography>
                 <Box sx={{ p: 0.5, pb: 1, flexGrow: 1, pr: 1, py: 1.5 }}>
                   2. {idNamePair.items[1]}
                 </Box>
+                <Typography>{idNamePair.votes[2]}</Typography>
                 <Box sx={{ p: 0.5, pb: 1, flexGrow: 1, pr: 1, py: 1.5 }}>
                   3. {idNamePair.items[2]}
                 </Box>
+                <Typography>{idNamePair.votes[3]}</Typography>
                 <Box sx={{ p: 0.5, pb: 1, flexGrow: 1, pr: 1, py: 1.5 }}>
                   4. {idNamePair.items[3]}
                 </Box>
+                <Typography>{idNamePair.votes[4]}</Typography>
                 <Box sx={{ p: 0.5, pb: 1, flexGrow: 1, pr: 1, py: 1.5 }}>
                   5. {idNamePair.items[4]}
                 </Box>
+                <Typography>{idNamePair.votes[5]}</Typography>
               </Box>
               <Stack
                 style={{
