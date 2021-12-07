@@ -206,10 +206,10 @@ function GlobalStoreContextProvider(props) {
           listNameActive: false,
           itemActive: false,
           listMarkedForDeletion: null,
-          currentMenu: store.currentMenu,
-          searchQuery: store.searchQuery,
-          sortMode: store.sortMode,
-          aggLists: store.aggLists,
+          currentMenu: 1,
+          searchQuery: "",
+          sortMode: 0,
+          aggLists: [],
         }));
       }
       case GlobalStoreActionType.SET_MENU: {
@@ -511,6 +511,9 @@ function GlobalStoreContextProvider(props) {
   };
 
   store.addComment = async function (id, comment) {
+    if (auth.user.username == "Guest") {
+      return;
+    }
     async function updateList(top5List) {
       let response = await api.updateTop5ListById(top5List._id, top5List);
       if (response.data.success) {
@@ -580,6 +583,9 @@ function GlobalStoreContextProvider(props) {
   };
 
   store.setLike = async function (id) {
+    if (auth.user.username == "Guest") {
+      return;
+    }
     async function updateList(top5List) {
       let response = await api.updateTop5ListById(top5List._id, top5List);
       if (response.data.success) {
@@ -620,6 +626,9 @@ function GlobalStoreContextProvider(props) {
     }
   };
   store.setLikeAgg = async function (id) {
+    if (auth.user.username == "Guest") {
+      return;
+    }
     console.log("clicked2");
     const aggtoincrement = await api.getAggListById(id);
     let agglist = aggtoincrement.data.agglist;
@@ -642,6 +651,9 @@ function GlobalStoreContextProvider(props) {
     await store.fetchAggLists();
   };
   store.setDislikeAgg = async function (id) {
+    if (auth.user.username == "Guest") {
+      return;
+    }
     console.log("clicked2");
     const aggtoincrement = await api.getAggListById(id);
     let agglist = aggtoincrement.data.agglist;
@@ -664,6 +676,9 @@ function GlobalStoreContextProvider(props) {
     await store.fetchAggLists();
   };
   store.addCommentAgg = async function (id, comment) {
+    if (auth.user.username == "Guest") {
+      return;
+    }
     const aggtoincrement = await api.getAggListById(id);
     let agglist = aggtoincrement.data.agglist;
     agglist.comments.push(comment);
@@ -673,6 +688,9 @@ function GlobalStoreContextProvider(props) {
     await store.fetchAggLists();
   };
   store.setDislike = async function (id) {
+    if (auth.user.username == "Guest") {
+      return;
+    }
     async function updateList(top5List) {
       let response = await api.updateTop5ListById(top5List._id, top5List);
       if (response.data.success) {

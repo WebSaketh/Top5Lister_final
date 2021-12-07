@@ -647,7 +647,6 @@ function ListCard(props) {
       />
     );
   }
-
   if (idNamePair.public) {
     cardElement = (
       <ListItem

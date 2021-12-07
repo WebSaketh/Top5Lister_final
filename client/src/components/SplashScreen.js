@@ -1,8 +1,13 @@
 import Typography from "@mui/material/Typography";
+import AuthContext from "../auth";
 import Button from "@mui/material/Button";
 import Copyright from "./Copyright";
 import { Link } from "react-router-dom";
+import GlobalStoreContext from "../store";
+import { useContext } from "react";
 export default function SplashScreen() {
+  const { auth } = useContext(AuthContext);
+  const { store } = useContext(GlobalStoreContext);
   return (
     <div id="splash-screen">
       <h3 id="splash-text">WELCOME TO T5L</h3>
@@ -46,27 +51,25 @@ export default function SplashScreen() {
             Sign Up
           </Button>
         </Link>
-        <Link
-          underline="none"
-          to="/register/"
-          style={{ textDecoration: "none" }}
+
+        <Button
+          id="splash-button"
+          variant="contained"
+          size="large"
+          style={{
+            width: 300,
+            height: 100,
+            backgroundColor: "#d4d4f5",
+            fontSize: "40px",
+            fontWeight: "bold",
+            borderRadius: "15px",
+          }}
+          onClick={() => {
+            auth.login({ isGuest: true }, store);
+          }}
         >
-          <Button
-            id="splash-button"
-            variant="contained"
-            size="large"
-            style={{
-              width: 300,
-              height: 100,
-              backgroundColor: "#d4d4f5",
-              fontSize: "40px",
-              fontWeight: "bold",
-              borderRadius: "15px",
-            }}
-          >
-            Guest
-          </Button>
-        </Link>
+          Guest
+        </Button>
       </div>
       <h6
         style={{ fontSize: "30px", marginBlockStart: "3em" }}
