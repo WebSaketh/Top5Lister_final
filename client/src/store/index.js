@@ -65,7 +65,7 @@ function GlobalStoreContextProvider(props) {
     switch (type) {
       // LIST UPDATE OF ITS NAME
       case GlobalStoreActionType.CHANGE_LIST_NAME: {
-        return setStore((store) => ({
+        return setStore({
           idNamePairs: payload.idNamePairs,
           currentList: null,
           newListCounter: store.newListCounter,
@@ -76,11 +76,11 @@ function GlobalStoreContextProvider(props) {
           searchQuery: store.searchQuery,
           sortMode: store.sortMode,
           aggLists: store.aggLists,
-        }));
+        });
       }
       // STOP EDITING THE CURRENT LIST
       case GlobalStoreActionType.CLOSE_CURRENT_LIST: {
-        return setStore((store) => ({
+        return setStore({
           idNamePairs: store.idNamePairs,
           currentList: null,
           newListCounter: store.newListCounter,
@@ -91,11 +91,11 @@ function GlobalStoreContextProvider(props) {
           searchQuery: store.searchQuery,
           sortMode: store.sortMode,
           aggLists: store.aggLists,
-        }));
+        });
       }
       // CREATE A NEW LIST
       case GlobalStoreActionType.CREATE_NEW_LIST: {
-        return setStore((store) => ({
+        return setStore({
           idNamePairs: store.idNamePairs,
           currentList: payload,
           newListCounter: store.newListCounter + 1,
@@ -106,11 +106,11 @@ function GlobalStoreContextProvider(props) {
           searchQuery: store.searchQuery,
           sortMode: store.sortMode,
           aggLists: store.aggLists,
-        }));
+        });
       }
       // GET ALL THE LISTS SO WE CAN PRESENT THEM
       case GlobalStoreActionType.LOAD_ID_NAME_PAIRS: {
-        return setStore((store) => ({
+        return setStore({
           idNamePairs: payload,
           currentList: null,
           newListCounter: store.newListCounter,
@@ -121,11 +121,11 @@ function GlobalStoreContextProvider(props) {
           searchQuery: store.searchQuery,
           sortMode: store.sortMode,
           aggLists: store.aggLists,
-        }));
+        });
       }
       // PREPARE TO DELETE A LIST
       case GlobalStoreActionType.MARK_LIST_FOR_DELETION: {
-        return setStore((store) => ({
+        return setStore({
           idNamePairs: store.idNamePairs,
           currentList: null,
           newListCounter: store.newListCounter,
@@ -136,11 +136,11 @@ function GlobalStoreContextProvider(props) {
           searchQuery: store.searchQuery,
           sortMode: store.sortMode,
           aggLists: store.aggLists,
-        }));
+        });
       }
       // PREPARE TO DELETE A LIST
       case GlobalStoreActionType.UNMARK_LIST_FOR_DELETION: {
-        return setStore((store) => ({
+        return setStore({
           idNamePairs: store.idNamePairs,
           currentList: null,
           newListCounter: store.newListCounter,
@@ -151,11 +151,11 @@ function GlobalStoreContextProvider(props) {
           searchQuery: store.searchQuery,
           sortMode: store.sortMode,
           aggLists: store.aggLists,
-        }));
+        });
       }
       // UPDATE A LIST
       case GlobalStoreActionType.SET_CURRENT_LIST: {
-        return setStore((store) => ({
+        return setStore({
           idNamePairs: store.idNamePairs,
           currentList: payload,
           newListCounter: store.newListCounter,
@@ -166,11 +166,11 @@ function GlobalStoreContextProvider(props) {
           searchQuery: store.searchQuery,
           sortMode: store.sortMode,
           aggLists: store.aggLists,
-        }));
+        });
       }
       // START EDITING A LIST ITEM
       case GlobalStoreActionType.SET_ITEM_EDIT_ACTIVE: {
-        return setStore((store) => ({
+        return setStore({
           idNamePairs: store.idNamePairs,
           currentList: store.currentList,
           newListCounter: store.newListCounter,
@@ -181,11 +181,11 @@ function GlobalStoreContextProvider(props) {
           searchQuery: store.searchQuery,
           sortMode: store.sortMode,
           aggLists: store.aggLists,
-        }));
+        });
       }
       // START EDITING A LIST NAME
       case GlobalStoreActionType.SET_LIST_NAME_EDIT_ACTIVE: {
-        return setStore((store) => ({
+        return setStore({
           idNamePairs: store.idNamePairs,
           currentList: payload,
           newListCounter: store.newListCounter,
@@ -196,24 +196,24 @@ function GlobalStoreContextProvider(props) {
           searchQuery: store.searchQuery,
           sortMode: store.sortMode,
           aggLists: store.aggLists,
-        }));
+        });
       }
       case GlobalStoreActionType.RESET_COUNTER: {
-        return setStore((store) => ({
+        return setStore({
           idNamePairs: [],
           currentList: null,
           newListCounter: 0,
           listNameActive: false,
           itemActive: false,
           listMarkedForDeletion: null,
-          currentMenu: 1,
-          searchQuery: "",
-          sortMode: 0,
-          aggLists: [],
-        }));
+          currentMenu: store.currentMenu,
+          searchQuery: store.searchQuery,
+          sortMode: store.sortMode,
+          aggLists: store.aggLists,
+        });
       }
       case GlobalStoreActionType.SET_MENU: {
-        return setStore((store) => ({
+        return setStore({
           idNamePairs: store.idNamePairs,
           currentList: store.currentList,
           newListCounter: store.newListCounter,
@@ -224,10 +224,10 @@ function GlobalStoreContextProvider(props) {
           searchQuery: store.searchQuery,
           sortMode: store.sortMode,
           aggLists: store.aggLists,
-        }));
+        });
       }
       case GlobalStoreActionType.SET_QUERY: {
-        return setStore((store) => ({
+        return setStore({
           idNamePairs: store.idNamePairs,
           currentList: store.currentList,
           newListCounter: store.newListCounter,
@@ -238,10 +238,10 @@ function GlobalStoreContextProvider(props) {
           searchQuery: payload,
           sortMode: store.sortMode,
           aggLists: store.aggLists,
-        }));
+        });
       }
       case GlobalStoreActionType.SET_SORT: {
-        return setStore((store) => ({
+        return setStore({
           idNamePairs: store.idNamePairs,
           currentList: store.currentList,
           newListCounter: store.newListCounter,
@@ -252,14 +252,21 @@ function GlobalStoreContextProvider(props) {
           searchQuery: store.searchQuery,
           sortMode: payload,
           aggLists: store.aggLists,
-        }));
+        });
       }
       case GlobalStoreActionType.LOAD_AGG_LISTS: {
-        setStore((store) => ({
-          ...store,
+        return setStore({
+          idNamePairs: store.idNamePairs,
+          currentList: store.currentList,
+          newListCounter: store.newListCounter,
+          listNameActive: store.listNameActive,
+          itemActive: store.itemActive,
+          listMarkedForDeletion: store.listMarkedForDeletion,
+          currentMenu: store.currentMenu,
+          searchQuery: store.searchQuery,
+          sortMode: store.sortMode,
           aggLists: payload,
-        }));
-        return;
+        });
       }
       default:
         return store;
@@ -387,14 +394,13 @@ function GlobalStoreContextProvider(props) {
     store.deleteList(store.listMarkedForDeletion);
   };
 
-  store.fetchAggLists = async function () {
+  store.getAggLists = async function () {
     console.log("starting");
     const response = await api.getAggLists();
-    console.log(response);
     if (response.data.success) {
       let agglists = response.data.data;
       storeReducer({
-        type: GlobalStoreActionType.LOAD_AGG_LISTS,
+        type: GlobalStoreActionType.MARK_LIST_FOR_DELETION,
         payload: agglists,
       });
     }
@@ -511,9 +517,6 @@ function GlobalStoreContextProvider(props) {
   };
 
   store.addComment = async function (id, comment) {
-    if (auth.user.username == "Guest") {
-      return;
-    }
     async function updateList(top5List) {
       let response = await api.updateTop5ListById(top5List._id, top5List);
       if (response.data.success) {
@@ -541,7 +544,6 @@ function GlobalStoreContextProvider(props) {
   };
 
   store.incrementVote = async function (id) {
-    console.log(store.aggLists);
     async function updateList(top5List) {
       let response = await api.updateTop5ListById(top5List._id, top5List);
       if (response.data.success) {
@@ -558,7 +560,6 @@ function GlobalStoreContextProvider(props) {
             });
           }
         }
-
         getListPairs(top5List);
       }
     }
@@ -571,21 +572,7 @@ function GlobalStoreContextProvider(props) {
     console.log(list);
     updateList(list);
   };
-
-  store.incrementVoteAgg = async function (id) {
-    const aggtoincrement = await api.getAggListById(id);
-    let agglist = aggtoincrement.data.agglist;
-    agglist.views = agglist.views + 1;
-    console.log(agglist);
-    const response = await api.updateAggListbyId(id, agglist);
-    await store.loadIdNamePairs();
-    await store.fetchAggLists();
-  };
-
   store.setLike = async function (id) {
-    if (auth.user.username == "Guest") {
-      return;
-    }
     async function updateList(top5List) {
       let response = await api.updateTop5ListById(top5List._id, top5List);
       if (response.data.success) {
@@ -625,72 +612,7 @@ function GlobalStoreContextProvider(props) {
       updateList(list);
     }
   };
-  store.setLikeAgg = async function (id) {
-    if (auth.user.username == "Guest") {
-      return;
-    }
-    console.log("clicked2");
-    const aggtoincrement = await api.getAggListById(id);
-    let agglist = aggtoincrement.data.agglist;
-    console.log(agglist);
-    let list = agglist;
-    if (list.dislikes.includes(auth.user.username)) {
-      list.dislikes = list.dislikes.filter(function (name) {
-        return name !== auth.user.username;
-      });
-      list.likes.push(auth.user.username);
-    } else if (list.likes.includes(auth.user.username)) {
-      list.likes = list.likes.filter(function (name) {
-        return name !== auth.user.username;
-      });
-    } else {
-      list.likes.push(auth.user.username);
-    }
-    const response = await api.updateAggListbyId(id, list);
-    await store.loadIdNamePairs();
-    await store.fetchAggLists();
-  };
-  store.setDislikeAgg = async function (id) {
-    if (auth.user.username == "Guest") {
-      return;
-    }
-    console.log("clicked2");
-    const aggtoincrement = await api.getAggListById(id);
-    let agglist = aggtoincrement.data.agglist;
-    console.log(agglist);
-    let list = agglist;
-    if (list.likes.includes(auth.user.username)) {
-      list.likes = list.likes.filter(function (name) {
-        return name !== auth.user.username;
-      });
-      list.dislikes.push(auth.user.username);
-    } else if (list.dislikes.includes(auth.user.username)) {
-      list.dislikes = list.dislikes.filter(function (name) {
-        return name !== auth.user.username;
-      });
-    } else {
-      list.dislikes.push(auth.user.username);
-    }
-    const response = await api.updateAggListbyId(id, list);
-    await store.loadIdNamePairs();
-    await store.fetchAggLists();
-  };
-  store.addCommentAgg = async function (id, comment) {
-    if (auth.user.username == "Guest") {
-      return;
-    }
-    const aggtoincrement = await api.getAggListById(id);
-    let agglist = aggtoincrement.data.agglist;
-    agglist.comments.push(comment);
-    console.log(agglist);
-    const response = await api.updateAggListbyId(id, agglist);
-    await store.loadIdNamePairs();
-    await store.fetchAggLists();
-  };
   store.setDislike = async function (id) {
-    if (auth.user.username == "Guest") {
-      return;
-    }
     async function updateList(top5List) {
       let response = await api.updateTop5ListById(top5List._id, top5List);
       if (response.data.success) {

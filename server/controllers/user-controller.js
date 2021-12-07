@@ -2,11 +2,6 @@ const auth = require("../auth");
 const User = require("../models/user-model");
 const bcrypt = require("bcryptjs");
 
-const guestCreds = {
-  email: "Guest@guest.com",
-  password: "password",
-};
-
 getLoggedIn = async (req, res) => {
   auth.verify(req, res, async function () {
     const loggedInUser = await User.findOne({ _id: req.userId });
@@ -26,31 +21,11 @@ getLoggedIn = async (req, res) => {
 };
 
 login = async (req, res) => {
-  let { email, password, isGuest = false } = req.body;
-  if (isGuest) {
-    email = guestCreds.email;
-    password = guestCreds.password;
-    const user = await User.findOne({ email: guestCreds.email }).exec();
-    if (!user) {
-      const saltRounds = 10;
-      const salt = await bcrypt.genSalt(saltRounds);
-      const passwordHash = await bcrypt.hash(password, salt);
-
-      const newUser = new User({
-        firstName: "Guest",
-        lastName: "G",
-        email,
-        passwordHash,
-        username: "Guest",
-      });
-      await newUser.save();
-    }
-  } else {
-    if (!email || !password) {
-      return res
-        .status(400)
-        .json({ errorMessage: "Please enter all required fields." });
-    }
+  const { email, password } = req.body;
+  if (!email || !password) {
+    return res
+      .status(400)
+      .json({ errorMessage: "Please enter all required fields." });
   }
   const user = await User.findOne({ email }).exec();
   if (!user) {

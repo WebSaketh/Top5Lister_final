@@ -8,22 +8,12 @@ import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import SortIcon from "@mui/icons-material/Sort";
-import AuthContext from "../auth";
+
 import { InputBase, Paper, Stack, Typography } from "@mui/material";
 import SortMenu from "./SortMenu";
 
 function LoadMenu(props) {
-  const { auth } = useContext(AuthContext);
   function getStyleHome() {
-    if (auth.user?.username == "Guest") {
-      return {
-        borderWidth: "2px",
-        borderStyle: "solid",
-        borderColor: "transparent",
-        color: "grey",
-        backgroundColor: "transparent",
-      };
-    }
     if (store.currentMenu === 1) {
       return {
         borderWidth: "2px",
@@ -97,9 +87,6 @@ function LoadMenu(props) {
   }
 
   function setHome() {
-    if (auth.user.username == "Guest") {
-      return;
-    }
     // console.log("before", store.currentMenu);
     store.updateMenu(1);
     // console.log("after", store.currentMenu);
@@ -262,7 +249,6 @@ function LoadMenu(props) {
           onClick={setAll}
           className="loadMenuButton"
           style={getStyleAll()}
-          styleHome
         >
           <GroupsOutlinedIcon fontSize="large" />
         </ButtonUnstyled>
