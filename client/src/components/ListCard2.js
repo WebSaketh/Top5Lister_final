@@ -579,31 +579,31 @@ export default function ListCard2(props) {
                     width: "50%",
                   }}
                 >
-                  <Box sx={{ p: 0.5, pb: 1, flexGrow: 1, pr: 1, py: 1.5 }}>
+                  <Box sx={{ p: 0, pb: 0, flexGrow: 1, pr: 1, py: 1.5 }}>
                     1. {idNamePair.items[0][0]}
                   </Box>
-                  <Typography sx={{ ml: 4 }}>
+                  <Typography sx={{ ml: 4, p: 0 }}>
                     ({idNamePair.items[0][1]}) votes
                   </Typography>
-                  <Box sx={{ p: 0.5, pb: 1, flexGrow: 1, pr: 1, py: 1.5 }}>
+                  <Box sx={{ p: 0, pb: 0, flexGrow: 1, pr: 1, py: 1.5 }}>
                     2. {idNamePair.items[1][0]}
                   </Box>
                   <Typography sx={{ ml: 4 }}>
                     ({idNamePair.items[1][1]}) votes
                   </Typography>
-                  <Box sx={{ p: 0.5, pb: 1, flexGrow: 1, pr: 1, py: 1.5 }}>
+                  <Box sx={{ p: 0, pb: 0, flexGrow: 1, pr: 1, py: 1.5 }}>
                     3. {idNamePair.items[2][0]}
                   </Box>
                   <Typography sx={{ ml: 4 }}>
                     ({idNamePair.items[2][1]}) votes
                   </Typography>
-                  <Box sx={{ p: 0.5, pb: 1, flexGrow: 1, pr: 1, py: 1.5 }}>
+                  <Box sx={{ p: 0, pb: 0, flexGrow: 1, pr: 1, py: 1.5 }}>
                     4. {idNamePair.items[3][0]}
                   </Box>
                   <Typography sx={{ ml: 4 }}>
                     ({idNamePair.items[3][1]}) votes
                   </Typography>
-                  <Box sx={{ p: 0.5, pb: 1, flexGrow: 1, pr: 1, py: 1.5 }}>
+                  <Box sx={{ p: 0, pb: 0, flexGrow: 1, pr: 1, py: 1.5 }}>
                     5. {idNamePair.items[4][0]}
                   </Box>
                   <Typography sx={{ ml: 4 }}>
@@ -629,8 +629,8 @@ export default function ListCard2(props) {
                       width: "100%",
                       overflow: "scroll",
                       overflowX: "hidden",
-                      minHeight: 300,
-                      maxHeight: 300,
+                      minHeight: 413,
+                      maxHeight: 413,
                     }}
                     elevation={0}
                   >

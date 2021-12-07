@@ -5,6 +5,7 @@ import { Button, Stack, Typography, Box } from "@mui/material";
 import { GlobalStoreContext } from "../store/index.js";
 import LoadMenu from "./LoadMenu.js";
 import Top5Title from "./Top5Title.js";
+import AuthContext from "../auth";
 /*
     This React component lets us edit a loaded list, which only
     happens when we are on the proper route.
@@ -13,7 +14,7 @@ import Top5Title from "./Top5Title.js";
 */
 function WorkspaceScreen() {
   const { store } = useContext(GlobalStoreContext);
-
+  const { auth } = useContext(AuthContext);
   useEffect(() => {
     if (store.currentList == null) {
       const id = window.location.pathname.substring("/top5list/".length);
@@ -42,6 +43,10 @@ function WorkspaceScreen() {
     store.closeCurrentList();
   };
   function publish() {
+    console.log(store.currentList.name);
+    console.log(store.idNamePairs);
+
+    return;
     store.currentList.public = true;
     store.updateCurrentList();
     store.closeCurrentList();
@@ -63,7 +68,19 @@ function WorkspaceScreen() {
     if (store.currentList?.items[4] === "") {
       return true;
     }
-    return false;
+    if (store.currentList?.name == "") {
+      return true;
+    }
+    let k = false;
+    store.idNamePairs.forEach((e) => {
+      if (
+        e.username == auth.user.username &&
+        e.name.toLowerCase() == store.currentList.name.toLowerCase()
+      ) {
+        k = true;
+      }
+    });
+    return k;
   };
   return (
     <div>
