@@ -100,7 +100,6 @@ function AuthContextProvider(props) {
     }
   };
   auth.logoutUser = async function (userData, store) {
-    console.log("hey");
     const response = await api.logoutUser(userData).catch((err) => {
       throw err;
     });

@@ -14,8 +14,6 @@ import AuthContext from "../auth";
 */
 const HomeScreen = () => {
   const { store } = useContext(GlobalStoreContext);
-
-  const [aggLists, setAggLists] = useState();
   const { auth } = useContext(AuthContext);
   useEffect(() => {
     loadData();
@@ -25,11 +23,6 @@ const HomeScreen = () => {
     await store.loadIdNamePairs();
     await store.fetchAggLists();
   }
-
-  useEffect(() => {
-    console.log(store.aggLists);
-    setAggLists(store.aggLists);
-  }, [store.aggLists]);
 
   function handleCreateNewList() {
     store.createNewList();

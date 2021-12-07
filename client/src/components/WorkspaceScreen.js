@@ -43,10 +43,6 @@ function WorkspaceScreen() {
     store.closeCurrentList();
   };
   function publish() {
-    console.log(store.currentList.name);
-    console.log(store.idNamePairs);
-
-    return;
     store.currentList.public = true;
     store.updateCurrentList();
     store.closeCurrentList();
@@ -75,7 +71,8 @@ function WorkspaceScreen() {
     store.idNamePairs.forEach((e) => {
       if (
         e.username == auth.user.username &&
-        e.name.toLowerCase() == store.currentList.name.toLowerCase()
+        e.name.toLowerCase() == store.currentList.name.toLowerCase() &&
+        e.public
       ) {
         k = true;
       }

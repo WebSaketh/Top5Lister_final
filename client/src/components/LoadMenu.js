@@ -262,7 +262,6 @@ function LoadMenu(props) {
           onClick={setAll}
           className="loadMenuButton"
           style={getStyleAll()}
-          styleHome
         >
           <GroupsOutlinedIcon fontSize="large" />
         </ButtonUnstyled>

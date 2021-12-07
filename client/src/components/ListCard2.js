@@ -38,12 +38,13 @@ export default function ListCard2(props) {
       store.setCurrentList(id);
     }
   }
-  function handleComment(e) {
+  const [comment, setComment] = useState("");
+  async function handleComment(e) {
     e.preventDefault();
-    console.log(idNamePair);
     const formData = new FormData(e.currentTarget);
     let comment = auth.user.username + "@" + formData.get("comment");
-    store.addCommentAgg(idNamePair._id, comment);
+    await store.addCommentAgg(idNamePair._id, comment);
+    setComment("");
   }
   function getNativeList(id) {
     let val = null;
@@ -56,8 +57,6 @@ export default function ListCard2(props) {
   }
   let score = new Map();
   function incrementMap(item, points) {
-    console.log(item, points);
-
     if (score.has(item)) {
       score.set(item, score.get(item) + points);
     } else {
@@ -65,10 +64,9 @@ export default function ListCard2(props) {
     }
   }
   if (true) {
-    console.log(idNamePair);
     idNamePair.lists.forEach((x) => {
-      let listItems = getNativeList(x).items;
-      listItems.forEach((item, index) => {
+      let listItems = getNativeList(x)?.items;
+      listItems?.forEach((item, index) => {
         incrementMap(item, 5 - index);
       });
     });
@@ -100,11 +98,6 @@ export default function ListCard2(props) {
         five = [key, value];
       }
     });
-    console.log(one);
-    console.log(two);
-    console.log(three);
-    console.log(four);
-    console.log(five);
     idNamePair.items = [one, two, three, four, five];
   }
   function handleToggleEdit(event) {
@@ -168,8 +161,6 @@ export default function ListCard2(props) {
   }
 
   function setLike() {
-    console.log("clicked2");
-    console.log(idNamePair._id);
     store.setLikeAgg(idNamePair._id);
   }
   function setDislike() {
@@ -182,8 +173,6 @@ export default function ListCard2(props) {
   }
 
   function likeIcon() {
-    console.log("likes", idNamePair.likes);
-    console.log("user", auth.user.username);
     if (idNamePair.likes.includes(auth.user.username)) {
       return <ThumbUpIcon style={{ color: "black", fontSize: "40pt" }} />;
     }
@@ -316,7 +305,6 @@ export default function ListCard2(props) {
     ev.preventDefault();
     ev.stopPropagation();
     await store.unmarkListForDeletion();
-    console.log(store.listMarkedForDeletion);
   }
 
   function handleKeyPress(event) {
@@ -648,6 +636,10 @@ export default function ListCard2(props) {
                     onSubmit={handleComment}
                   >
                     <InputBase
+                      value={comment}
+                      onChange={(e) => {
+                        setComment(e.target.value);
+                      }}
                       sx={{ ml: 1, flex: 1 }}
                       placeholder="Comment"
                       inputProps={{ "aria-label": "comment" }}

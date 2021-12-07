@@ -212,11 +212,6 @@ getAggLists = async (req, res) => {
     if (err) {
       return res.status(400).json({ success: false, error: err });
     }
-    if (!agglists.length) {
-      return res
-        .status(404)
-        .json({ success: false, error: `Agg Lists not found` });
-    }
     return res.status(200).json({ success: true, data: agglists });
   }).catch((err) => console.log(err));
 };

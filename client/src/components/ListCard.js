@@ -38,12 +38,14 @@ function ListCard(props) {
       store.setCurrentList(id);
     }
   }
-  function handleComment(e) {
+  const [comment, setComment] = useState("");
+  async function handleComment(e) {
     e.preventDefault();
     console.log(idNamePair);
     const formData = new FormData(e.currentTarget);
     let comment = auth.user.username + "@" + formData.get("comment");
-    store.addComment(idNamePair._id, comment);
+    await store.addComment(idNamePair._id, comment);
+    setComment("");
   }
 
   function handleToggleEdit(event) {
@@ -251,7 +253,6 @@ function ListCard(props) {
     ev.preventDefault();
     ev.stopPropagation();
     await store.unmarkListForDeletion();
-    console.log(store.listMarkedForDeletion);
   }
 
   function handleKeyPress(event) {
@@ -568,6 +569,10 @@ function ListCard(props) {
                     onSubmit={handleComment}
                   >
                     <InputBase
+                      value={comment}
+                      onChange={(e) => {
+                        setComment(e.target.value);
+                      }}
                       sx={{ ml: 1, flex: 1 }}
                       placeholder="Comment"
                       inputProps={{ "aria-label": "comment" }}
@@ -973,6 +978,10 @@ function ListCard(props) {
                   onSubmit={handleComment}
                 >
                   <InputBase
+                    value={comment}
+                    onChange={(e) => {
+                      setComment(e.target.value);
+                    }}
                     sx={{ ml: 1, flex: 1 }}
                     placeholder="Comment"
                     inputProps={{ "aria-label": "comment" }}

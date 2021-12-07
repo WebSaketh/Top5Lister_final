@@ -365,21 +365,29 @@ function GlobalStoreContextProvider(props) {
   // showDeleteListModal, and hideDeleteListModal
   store.markListForDeletion = async function (id) {
     // GET THE LIST
-    let response = await api.getTop5ListById(id);
-    if (response.data.success) {
-      let top5List = response.data.top5List;
-      storeReducer({
-        type: GlobalStoreActionType.MARK_LIST_FOR_DELETION,
-        payload: top5List,
-      });
+    try {
+      let response = await api.getTop5ListById(id);
+      if (response.data.success) {
+        let top5List = response.data.top5List;
+        storeReducer({
+          type: GlobalStoreActionType.MARK_LIST_FOR_DELETION,
+          payload: top5List,
+        });
+      }
+    } catch (err) {
+      console.log(err);
     }
   };
 
   store.deleteList = async function (listToDelete) {
-    let response = await api.deleteTop5ListById(listToDelete._id);
-    if (response.data.success) {
-      store.loadIdNamePairs();
-      history.push("/");
+    try {
+      let response = await api.deleteTop5ListById(listToDelete._id);
+      if (response.data.success) {
+        store.loadIdNamePairs();
+        history.push("/");
+      }
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -388,16 +396,17 @@ function GlobalStoreContextProvider(props) {
   };
 
   store.fetchAggLists = async function () {
-    console.log("starting");
-    const response = await api.getAggLists();
-    console.log(response);
-    if (response.data.success) {
-      let agglists = response.data.data;
-      storeReducer({
-        type: GlobalStoreActionType.LOAD_AGG_LISTS,
-        payload: agglists,
-      });
-    }
+    try {
+      const response = await api.getAggLists();
+      console.log(response);
+      if (response.data.success) {
+        let agglists = response.data.data;
+        storeReducer({
+          type: GlobalStoreActionType.LOAD_AGG_LISTS,
+          payload: agglists,
+        });
+      }
+    } catch (err) {}
   };
 
   store.unmarkListForDeletion = function () {
@@ -412,19 +421,21 @@ function GlobalStoreContextProvider(props) {
   // FUNCTIONS ARE setCurrentList, addMoveItemTransaction, addUpdateItemTransaction,
   // moveItem, updateItem, updateCurrentList, undo, and redo
   store.setCurrentList = async function (id) {
-    let response = await api.getTop5ListById(id);
-    if (response.data.success) {
-      let top5List = response.data.top5List;
-
-      response = await api.updateTop5ListById(top5List._id, top5List);
+    try {
+      let response = await api.getTop5ListById(id);
       if (response.data.success) {
-        storeReducer({
-          type: GlobalStoreActionType.SET_CURRENT_LIST,
-          payload: top5List,
-        });
-        history.push("/top5list/" + top5List._id);
+        let top5List = response.data.top5List;
+
+        response = await api.updateTop5ListById(top5List._id, top5List);
+        if (response.data.success) {
+          storeReducer({
+            type: GlobalStoreActionType.SET_CURRENT_LIST,
+            payload: top5List,
+          });
+          history.push("/top5list/" + top5List._id);
+        }
       }
-    }
+    } catch (err) {}
   };
 
   store.editCurrentList = function (top5List) {
@@ -498,16 +509,18 @@ function GlobalStoreContextProvider(props) {
   };
 
   store.updateCurrentList = async function () {
-    const response = await api.updateTop5ListById(
-      store.currentList._id,
-      store.currentList
-    );
-    if (response.data.success) {
-      storeReducer({
-        type: GlobalStoreActionType.SET_CURRENT_LIST,
-        payload: store.currentList,
-      });
-    }
+    try {
+      const response = await api.updateTop5ListById(
+        store.currentList._id,
+        store.currentList
+      );
+      if (response.data.success) {
+        storeReducer({
+          type: GlobalStoreActionType.SET_CURRENT_LIST,
+          payload: store.currentList,
+        });
+      }
+    } catch (err) {}
   };
 
   store.addComment = async function (id, comment) {
@@ -533,11 +546,12 @@ function GlobalStoreContextProvider(props) {
         getListPairs(top5List);
       }
     }
-
-    const response = await api.getTop5ListById(id);
-    let list = response.data.top5List;
-    list.comments.push(comment);
-    updateList(list);
+    try {
+      const response = await api.getTop5ListById(id);
+      let list = response.data.top5List;
+      list.comments.push(comment);
+      updateList(list);
+    } catch (err) {}
   };
 
   store.incrementVote = async function (id) {
@@ -562,24 +576,28 @@ function GlobalStoreContextProvider(props) {
         getListPairs(top5List);
       }
     }
-    console.log("2");
-    const response = await api.getTop5ListById(id);
-    console.log("3");
-    let list = response.data.top5List;
-    console.log(list);
-    list.views++;
-    console.log(list);
-    updateList(list);
+    try {
+      console.log("2");
+      const response = await api.getTop5ListById(id);
+      console.log("3");
+      let list = response.data.top5List;
+      console.log(list);
+      list.views++;
+      console.log(list);
+      updateList(list);
+    } catch (err) {}
   };
 
   store.incrementVoteAgg = async function (id) {
-    const aggtoincrement = await api.getAggListById(id);
-    let agglist = aggtoincrement.data.agglist;
-    agglist.views = agglist.views + 1;
-    console.log(agglist);
-    const response = await api.updateAggListbyId(id, agglist);
-    await store.loadIdNamePairs();
-    await store.fetchAggLists();
+    try {
+      const aggtoincrement = await api.getAggListById(id);
+      let agglist = aggtoincrement.data.agglist;
+      agglist.views = agglist.views + 1;
+      console.log(agglist);
+      const response = await api.updateAggListbyId(id, agglist);
+      await store.loadIdNamePairs();
+      await store.fetchAggLists();
+    } catch (err) {}
   };
 
   store.setLike = async function (id) {
@@ -605,87 +623,94 @@ function GlobalStoreContextProvider(props) {
         getListPairs(top5List);
       }
     }
-
-    const response = await api.getTop5ListById(id);
-    let list = response.data.top5List;
-    console.log(auth.user.username);
-    if (list.dislikes.includes(auth.user.username)) {
-      list.dislikes = list.dislikes.filter(function (name) {
-        return name !== auth.user.username;
-      });
-      list.likes.push(auth.user.username);
-      updateList(list);
-    } else if (list.likes.includes(auth.user.username)) {
-      list.likes = list.likes.filter(function (name) {
-        return name !== auth.user.username;
-      });
-      updateList(list);
-    } else {
-      list.likes.push(auth.user.username);
-      updateList(list);
-    }
+    try {
+      const response = await api.getTop5ListById(id);
+      let list = response.data.top5List;
+      console.log(auth.user.username);
+      if (list.dislikes.includes(auth.user.username)) {
+        list.dislikes = list.dislikes.filter(function (name) {
+          return name !== auth.user.username;
+        });
+        list.likes.push(auth.user.username);
+        updateList(list);
+      } else if (list.likes.includes(auth.user.username)) {
+        list.likes = list.likes.filter(function (name) {
+          return name !== auth.user.username;
+        });
+        updateList(list);
+      } else {
+        list.likes.push(auth.user.username);
+        updateList(list);
+      }
+    } catch (err) {}
   };
   store.setLikeAgg = async function (id) {
-    if (auth.user.username == "Guest") {
-      return;
-    }
-    console.log("clicked2");
-    const aggtoincrement = await api.getAggListById(id);
-    let agglist = aggtoincrement.data.agglist;
-    console.log(agglist);
-    let list = agglist;
-    if (list.dislikes.includes(auth.user.username)) {
-      list.dislikes = list.dislikes.filter(function (name) {
-        return name !== auth.user.username;
-      });
-      list.likes.push(auth.user.username);
-    } else if (list.likes.includes(auth.user.username)) {
-      list.likes = list.likes.filter(function (name) {
-        return name !== auth.user.username;
-      });
-    } else {
-      list.likes.push(auth.user.username);
-    }
-    const response = await api.updateAggListbyId(id, list);
-    await store.loadIdNamePairs();
-    await store.fetchAggLists();
+    try {
+      if (auth.user.username == "Guest") {
+        return;
+      }
+      console.log("clicked2");
+      const aggtoincrement = await api.getAggListById(id);
+      let agglist = aggtoincrement.data.agglist;
+      console.log(agglist);
+      let list = agglist;
+      if (list.dislikes.includes(auth.user.username)) {
+        list.dislikes = list.dislikes.filter(function (name) {
+          return name !== auth.user.username;
+        });
+        list.likes.push(auth.user.username);
+      } else if (list.likes.includes(auth.user.username)) {
+        list.likes = list.likes.filter(function (name) {
+          return name !== auth.user.username;
+        });
+      } else {
+        list.likes.push(auth.user.username);
+      }
+      const response = await api.updateAggListbyId(id, list);
+      await store.loadIdNamePairs();
+      await store.fetchAggLists();
+    } catch (err) {}
   };
   store.setDislikeAgg = async function (id) {
-    if (auth.user.username == "Guest") {
-      return;
-    }
-    console.log("clicked2");
-    const aggtoincrement = await api.getAggListById(id);
-    let agglist = aggtoincrement.data.agglist;
-    console.log(agglist);
-    let list = agglist;
-    if (list.likes.includes(auth.user.username)) {
-      list.likes = list.likes.filter(function (name) {
-        return name !== auth.user.username;
-      });
-      list.dislikes.push(auth.user.username);
-    } else if (list.dislikes.includes(auth.user.username)) {
-      list.dislikes = list.dislikes.filter(function (name) {
-        return name !== auth.user.username;
-      });
-    } else {
-      list.dislikes.push(auth.user.username);
-    }
-    const response = await api.updateAggListbyId(id, list);
-    await store.loadIdNamePairs();
-    await store.fetchAggLists();
+    try {
+      if (auth.user.username == "Guest") {
+        return;
+      }
+      console.log("clicked2");
+      const aggtoincrement = await api.getAggListById(id);
+      let agglist = aggtoincrement.data.agglist;
+      console.log(agglist);
+      let list = agglist;
+      if (list.likes.includes(auth.user.username)) {
+        list.likes = list.likes.filter(function (name) {
+          return name !== auth.user.username;
+        });
+        list.dislikes.push(auth.user.username);
+      } else if (list.dislikes.includes(auth.user.username)) {
+        list.dislikes = list.dislikes.filter(function (name) {
+          return name !== auth.user.username;
+        });
+      } else {
+        list.dislikes.push(auth.user.username);
+      }
+      const response = await api.updateAggListbyId(id, list);
+      await store.loadIdNamePairs();
+      await store.fetchAggLists();
+    } catch (err) {}
   };
   store.addCommentAgg = async function (id, comment) {
-    if (auth.user.username == "Guest") {
-      return;
-    }
-    const aggtoincrement = await api.getAggListById(id);
-    let agglist = aggtoincrement.data.agglist;
-    agglist.comments.push(comment);
-    console.log(agglist);
-    const response = await api.updateAggListbyId(id, agglist);
-    await store.loadIdNamePairs();
-    await store.fetchAggLists();
+    try {
+      if (auth.user.username == "Guest") {
+        return;
+      }
+      const aggtoincrement = await api.getAggListById(id);
+      let agglist = aggtoincrement.data.agglist;
+      agglist.comments.push(comment);
+      console.log(agglist);
+      const response = await api.updateAggListbyId(id, agglist);
+      await store.loadIdNamePairs();
+      await store.fetchAggLists();
+    } catch (err) {}
   };
   store.setDislike = async function (id) {
     if (auth.user.username == "Guest") {
@@ -710,25 +735,26 @@ function GlobalStoreContextProvider(props) {
         getListPairs(top5List);
       }
     }
-
-    const response = await api.getTop5ListById(id);
-    let list = response.data.top5List;
-    console.log(auth.user.username);
-    if (list.likes.includes(auth.user.username)) {
-      list.likes = list.likes.filter(function (name) {
-        return name !== auth.user.username;
-      });
-      list.dislikes.push(auth.user.username);
-      updateList(list);
-    } else if (list.dislikes.includes(auth.user.username)) {
-      list.dislikes = list.dislikes.filter(function (name) {
-        return name !== auth.user.username;
-      });
-      updateList(list);
-    } else {
-      list.dislikes.push(auth.user.username);
-      updateList(list);
-    }
+    try {
+      const response = await api.getTop5ListById(id);
+      let list = response.data.top5List;
+      console.log(auth.user.username);
+      if (list.likes.includes(auth.user.username)) {
+        list.likes = list.likes.filter(function (name) {
+          return name !== auth.user.username;
+        });
+        list.dislikes.push(auth.user.username);
+        updateList(list);
+      } else if (list.dislikes.includes(auth.user.username)) {
+        list.dislikes = list.dislikes.filter(function (name) {
+          return name !== auth.user.username;
+        });
+        updateList(list);
+      } else {
+        list.dislikes.push(auth.user.username);
+        updateList(list);
+      }
+    } catch (err) {}
   };
   store.undo = function () {
     tps.undoTransaction();
